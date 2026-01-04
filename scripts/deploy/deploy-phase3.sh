@@ -65,9 +65,9 @@ rustup target add wasm32-unknown-unknown 2>/dev/null || true
 cargo build --release --target wasm32-unknown-unknown -p policy-engine
 
 WASM_SRC="target/wasm32-unknown-unknown/release/policy_engine.wasm"
-WASM_DST="policy-worker/build/policy_engine.wasm"
+WASM_DST="workers/policy-worker/build/policy_engine.wasm"
 
-mkdir -p policy-worker/build
+mkdir -p workers/policy-worker/build
 cp "$WASM_SRC" "$WASM_DST"
 echo "✅ WASM copiado para $WASM_DST"
 echo "   $(ls -lh "$WASM_DST" | awk '{print $5}')"

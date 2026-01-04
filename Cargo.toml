@@ -1,19 +1,19 @@
 [workspace]
 members = [
-    "policy-engine",
-    "policy-proxy",
-    "policy-signer",
-    "policy-keygen",
+    "crates/policy-engine",
+    "crates/policy-proxy",
+    "crates/policy-signer",
+    "crates/policy-keygen",
     "apps/gateway",
     "apps/core-api",
 ]
 # Binários adicionais do core-api
 [workspace.metadata]
 default-members = [
-    "policy-engine",
-    "policy-proxy",
-    "policy-signer",
-    "policy-keygen",
+    "crates/policy-engine",
+    "crates/policy-proxy",
+    "crates/policy-signer",
+    "crates/policy-keygen",
     "apps/gateway",
     "apps/core-api",
 ]

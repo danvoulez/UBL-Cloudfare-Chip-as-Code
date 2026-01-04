@@ -1,0 +1,15 @@
+[Unit]
+Description=Cloudflare Tunnel (vvz-core → core.voulezvous.tv)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=cloudflared
+Group=cloudflared
+ExecStart=/usr/local/bin/cloudflared tunnel run --config /etc/cloudflared/config.yml vvz-core
+Restart=on-failure
+RestartSec=2
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ubl.agency/schemas/ledger.office.event.schema.json",
+  "title": "Ledger: office.event",
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "./atomic.schema.json"
+    }
+  ],
+  "properties": {
+    "kind": {
+      "const": "office.event"
+    },
+    "data": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event",
+        "delta_min"
+      ],
+      "properties": {
+        "event": {
+          "type": "string",
+          "minLength": 1
+        },
+        "delta_min": {
+          "type": "object"
+        }
+      }
+    }
+  }
+}

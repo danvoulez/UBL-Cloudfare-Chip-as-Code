@@ -1,0 +1,30 @@
+[Unit]
+Description=Voulezvous Core API (vvz-core)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=vvz
+Group=vvz
+Environment=PORT=8787
+Environment=RUST_LOG=info
+WorkingDirectory=/opt/vvz-core
+ExecStart=/opt/vvz-core/vvz-core
+Restart=on-failure
+RestartSec=2
+
+# Hardening (safe defaults; adjust if needed)
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectControlGroups=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectKernelLogs=true
+LockPersonality=true
+MemoryDenyWriteExecute=true
+LimitNOFILE=65535
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,47 @@
+{
+  "plan_id": "pro",
+  "features": {
+    "stage_live": true,
+    "vod": true,
+    "roulette": true
+  },
+  "buckets": {
+    "tool_call": {
+      "rate_per_min": 120,
+      "burst": 240,
+      "daily_cap": 5000
+    },
+    "messenger_envelope": {
+      "rate_per_min": 300,
+      "burst": 600,
+      "daily_cap": 20000
+    },
+    "rtc_min": {
+      "monthly_quota": 5000
+    },
+    "egress_bytes": {
+      "monthly_quota": 200000000000
+    },
+    "storage_bytes_month": {
+      "monthly_quota": 50000000000
+    },
+    "encode_min": {
+      "monthly_quota": 1000
+    }
+  },
+  "rating": {
+    "overage": {
+      "tool_call": 0.002,
+      "messenger_envelope": 0.0005,
+      "rtc_min": 0.01,
+      "egress_gb": 0.08,
+      "storage_gb_month": 0.02,
+      "encode_min": 0.05
+    }
+  },
+  "stripe": {
+    "price_ids": {
+      "monthly": "price_stub"
+    }
+  }
+}

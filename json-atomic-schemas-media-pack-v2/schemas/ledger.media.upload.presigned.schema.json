@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ledger.media.upload.presigned",
+  "allOf": [
+    {
+      "$ref": "./atomic.schema.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "media.upload.presigned"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "object_id": {
+              "type": "string"
+            },
+            "content_type": {
+              "type": "string"
+            },
+            "size_max": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "expires_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "method": {
+              "type": "string",
+              "enum": [
+                "put",
+                "post"
+              ]
+            },
+            "fields": {
+              "type": "object"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "object_id",
+            "content_type",
+            "size_max",
+            "expires_at",
+            "method"
+          ]
+        }
+      }
+    }
+  ]
+}

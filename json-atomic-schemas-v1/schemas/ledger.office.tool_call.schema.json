@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ubl.agency/schemas/ledger.office.tool_call.schema.json",
+  "title": "Ledger: office.tool_call",
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "./atomic.schema.json"
+    }
+  ],
+  "properties": {
+    "kind": {
+      "const": "office.tool_call"
+    },
+    "data": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tool",
+        "args_min",
+        "cost"
+      ],
+      "properties": {
+        "tool": {
+          "type": "string",
+          "minLength": 1
+        },
+        "args_min": {
+          "type": "object"
+        },
+        "cost": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "calls"
+          ],
+          "properties": {
+            "calls": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "bytes": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "plan_id": "free",
+  "features": {
+    "stage_live": false,
+    "vod": false,
+    "roulette": true
+  },
+  "buckets": {
+    "tool_call": {
+      "rate_per_min": 30,
+      "burst": 60,
+      "daily_cap": 600
+    },
+    "messenger_envelope": {
+      "rate_per_min": 60,
+      "burst": 120,
+      "daily_cap": 2000
+    },
+    "rtc_min": {
+      "monthly_quota": 500
+    },
+    "egress_bytes": {
+      "monthly_quota": 10000000000
+    },
+    "storage_bytes_month": {
+      "monthly_quota": 2000000000
+    },
+    "encode_min": {
+      "monthly_quota": 50
+    }
+  },
+  "rating": {
+    "overage": {}
+  }
+}

@@ -1,0 +1,32 @@
+# @name MediaContract
+@BASE_URL = https://api.ubl.agency
+@TOKEN = REPLACE_ME
+
+### Presign upload
+POST {{BASE_URL}}/media/presign
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{ "bucket": "user-media", "content_type": "video/mp4", "ttl_sec": 900 }
+
+### Commit descriptor (after PUT to presigned URL)
+POST {{BASE_URL}}/media/commit
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{
+  "upload_id": "{{upload_id}}",
+  "descriptor": {
+    "kind": "video",
+    "codec": "h264",
+    "duration_ms": 12000,
+    "sha256": "{{sha256}}"
+  }
+}
+
+### Playback token (temporary URL / policy)
+POST {{BASE_URL}}/media/tokens
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{ "descriptor_id": "{{descriptor_id}}", "ttl_sec": 600 }

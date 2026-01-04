@@ -1,0 +1,20 @@
+
+### 1) Check & consume real-time quota (should be OK until tokens end)
+POST http://127.0.0.1:8787/billing/quota/check_and_consume
+Content-Type: application/json
+
+{
+  "tenant_id": "demo",
+  "meter": "tool_call",
+  "qty": 1,
+  "op_key": "op-{{timestamp}}"
+}
+
+### 2) Snapshot counters (requires wrangler dev on 8787)
+GET http://127.0.0.1:8787/billing/admin/quota/snapshot?tenant_id=demo
+
+### 3) Get tenant plan from Axum
+GET http://127.0.0.1:8088/billing/me/plan
+
+### 4) Admin: get usage daily (stubbed)
+GET http://127.0.0.1:8088/admin/billing/tenants/demo/usage/daily?from=2026-01-01&to=2026-01-31

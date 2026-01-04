@@ -1,0 +1,14 @@
+{
+  "name": "vvz-rtc",
+  "version": "1.0.0",
+  "description": "RTC Signaling Worker with Durable Object RoomDO",
+  "main": "src/worker.ts",
+  "scripts": {
+    "deploy": "wrangler deploy --config wrangler.toml"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241106.0",
+    "typescript": "^5.3.3",
+    "wrangler": "^4.54.0"
+  }
+}

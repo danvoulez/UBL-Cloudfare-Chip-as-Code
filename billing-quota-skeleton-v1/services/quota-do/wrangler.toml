@@ -1,0 +1,30 @@
+name = "billing-quota"
+main = "src/index.ts"
+compatibility_date = "2024-11-29"
+
+routes = [
+  { pattern = "api.ubl.agency/billing/*", zone_name = "ubl.agency" }
+]
+
+[durable_objects]
+bindings = [
+  { name = "QUOTA_DO", class_name = "QuotaDO" }
+]
+
+[[migrations]]
+tag = "v1"
+new_classes = ["QuotaDO"]
+
+[d1_databases]
+[[d1_databases]]
+binding = "BILLING_DB"
+database_name = "billing_db"
+database_id = "stub-will-be-filled-by-wrangler"
+
+[[kv_namespaces]]
+binding = "PLANS_KV"
+id = "stub-will-be-filled-by-wrangler"
+
+[vars]
+# Optionally tweak default minute window length
+MINUTE_WINDOW_SECONDS = "60"

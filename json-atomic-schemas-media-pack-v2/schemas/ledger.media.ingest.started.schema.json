@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ledger.media.ingest.started",
+  "allOf": [
+    {
+      "$ref": "./atomic.schema.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "media.ingest.started"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "object_id": {
+              "type": "string"
+            },
+            "bytes_expected": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "method": {
+              "type": "string",
+              "enum": [
+                "r2",
+                "rtp",
+                "direct"
+              ]
+            },
+            "trace_id": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "object_id",
+            "bytes_expected",
+            "method"
+          ]
+        }
+      }
+    }
+  ]
+}

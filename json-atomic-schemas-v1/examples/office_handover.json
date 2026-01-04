@@ -1,0 +1,26 @@
+{
+  "id": "01HXOFFICEHANDOVEREXAMPLE00000",
+  "ts": "2026-01-04T12:00:00Z",
+  "kind": "office.handover",
+  "scope": {
+    "tenant": "ubl",
+    "entity": "cust_42",
+    "room": "room-123"
+  },
+  "actor": "office-session",
+  "refs": [
+    "01HXYZABCDEF00000000000000",
+    "01H..."
+  ],
+  "data": {
+    "summary_min": "3 tool/call; 1 pending; refs consolidated",
+    "counters": {
+      "calls": 3,
+      "errors": 0
+    }
+  },
+  "meta": {
+    "v": 1
+  },
+  "sig": null
+}

@@ -1,0 +1,32 @@
+name = "ubl-flagship-edge"
+main = "src/index.ts"
+compatibility_date = "2024-01-01"
+
+[env.production]
+name = "ubl-flagship-edge"
+
+[[kv_namespaces]]
+binding = "POLICY_KV"
+id = "your-kv-namespace-id"
+preview_id = "your-kv-preview-id"
+
+[[durable_objects.bindings]]
+name = "BREAKGLASS_DO"
+class_name = "BreakGlassDO"
+script_name = "ubl-flagship-edge"
+
+[[queues.producers]]
+queue = "policy-events"
+binding = "EVENT_QUEUE"
+
+[[queues.consumers]]
+queue = "policy-events"
+max_batch_size = 100
+max_batch_timeout = 30
+
+[build]
+command = "npm run build"
+cwd = "."
+
+[vars]
+PUBLIC_KEY = "your-ed25519-public-key-base64"

@@ -1,0 +1,25 @@
+{
+  "id": "01MA7K7K8Z3W1B3C5D6E7F8G9I",
+  "ts": "2026-01-04T09:33:40Z",
+  "kind": "media.ingest.started",
+  "scope": {
+    "tenant": "ubl",
+    "entity": "cust_42",
+    "room": "room-123",
+    "container": null
+  },
+  "actor": "ingest-worker",
+  "refs": [
+    "01MA7K7K8Z3W1B3C5D6E7F8G9H"
+  ],
+  "data": {
+    "object_id": "r2://media/ubl/cust_42/2026/01/clip_12345.webm",
+    "bytes_expected": 203145776,
+    "method": "multipart",
+    "trace_id": "trace-abc-123"
+  },
+  "meta": {
+    "v": 1
+  },
+  "sig": null
+}

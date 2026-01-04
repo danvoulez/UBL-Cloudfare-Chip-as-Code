@@ -1,0 +1,40 @@
+# @name StageSmoke
+@BASE_URL = https://api.ubl.agency
+@TOKEN = REPLACE_ME
+@SESSION_ID = {{session_id}}
+
+### Prepare (Stage, LL-HLS)
+POST {{BASE_URL}}/stream/prepare
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{
+  "mode": "stage",
+  "latency": "ll-hls",
+  "title": "Sample Stage",
+  "privacy": "public",
+  "record": false
+}
+
+> {% client.global.set("session_id", response.body.session_id); %}
+
+### Go Live
+POST {{BASE_URL}}/stream/go_live
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{ "session_id": "{{SESSION_ID}}" }
+
+### Snapshot (optional)
+POST {{BASE_URL}}/stream/snapshot
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{ "session_id": "{{SESSION_ID}}" }
+
+### End
+POST {{BASE_URL}}/stream/end
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{ "session_id": "{{SESSION_ID}}" }

@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "JSON✯Atomic Base Event (minimal)",
+  "type": "object",
+  "required": [
+    "id",
+    "ts",
+    "kind",
+    "scope",
+    "actor",
+    "refs",
+    "data",
+    "meta"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "ts": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "kind": {
+      "type": "string"
+    },
+    "scope": {
+      "type": "object",
+      "properties": {
+        "tenant": {
+          "type": "string"
+        },
+        "entity": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "room": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "container": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "tenant"
+      ]
+    },
+    "actor": {
+      "type": "string"
+    },
+    "refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "data": {
+      "type": "object"
+    },
+    "meta": {
+      "type": "object"
+    },
+    "sig": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

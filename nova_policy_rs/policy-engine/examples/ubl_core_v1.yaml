@@ -1,0 +1,56 @@
+# UBL Agency — Semantic Chip (Access Control)
+# ID sugerido no pack.json: ubl_access_chip_v1
+version: "tdln-chip/0.1"
+
+# 1) Bits de Política (verdade binária sobre o contexto)
+policies:
+  - id: P_Transport_Secure
+    description: "TLS 1.3+ obrigatório"
+    logic: "context.transport.tls_version >= 1.3"
+
+  - id: P_Device_Identity
+    description: "mTLS válido emitido pelo Edge/CA interna"
+    # No proxy usamos "UBL Local CA"; no Worker/Edge usamos "Cloudflare Edge"
+    logic: "context.mtls.verified == true AND (context.mtls.issuer == 'Cloudflare Edge' OR context.mtls.issuer == 'UBL Local CA')"
+
+  - id: P_User_Passkey
+    description: "Sessão via Passkey/WebAuthn do domínio"
+    logic: "context.auth.method IN ['access-passkey','webauthn'] AND context.auth.rp_id == 'app.ubl.agency'"
+
+  - id: P_Role_Admin
+    description: "Usuário pertence ao grupo operacional"
+    logic: "'ubl-ops' IN context.user.groups"
+
+  - id: P_Circuit_Breaker
+    description: "Modo emergência (break-glass) ativo"
+    logic: "system.panic_mode == true"
+
+# 2) Fiação (como os bits se compõem)
+wiring:
+  - id: W_ZeroTrust_Standard
+    structure:
+      sequence: [P_Transport_Secure, P_Device_Identity, P_User_Passkey]
+
+  - id: W_Admin_Access
+    structure:
+      sequence: [W_ZeroTrust_Standard, P_Role_Admin]
+
+  - id: W_Emergency_Override
+    structure:
+      parallel:
+        policies: [W_ZeroTrust_Standard, P_Circuit_Breaker]
+        aggregator: ANY  # se P_Circuit_Breaker for true, libera
+
+# 3) Saídas (o que materializar quando um fio dispara)
+outputs:
+  - allow_admin_write:
+      trigger: W_Admin_Access
+      action: "HTTP 200 + Enable Write Operations"
+
+  - allow_standard_access:
+      trigger: W_ZeroTrust_Standard
+      action: "HTTP 200 + Read Only"
+
+  - deny_invalid_access:
+      trigger: NOT(W_ZeroTrust_Standard)
+      action: "HTTP 403 + LogLine(status: rejected, reason: policy_fail)"

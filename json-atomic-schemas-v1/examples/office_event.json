@@ -1,0 +1,27 @@
+{
+  "id": "01HXOFFICEEVENTEXAMPLE0000000",
+  "ts": "2026-01-04T12:00:00Z",
+  "kind": "office.event",
+  "scope": {
+    "tenant": "ubl",
+    "entity": "cust_42",
+    "room": "room-123"
+  },
+  "actor": "office-session",
+  "refs": [
+    "01HXYZABCDEF00000000000000"
+  ],
+  "data": {
+    "event": "brief.updated",
+    "delta_min": {
+      "stage": "triage",
+      "refs_add": [
+        "01HABC..."
+      ]
+    }
+  },
+  "meta": {
+    "v": 1
+  },
+  "sig": null
+}

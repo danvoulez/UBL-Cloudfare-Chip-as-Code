@@ -1,0 +1,97 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ledger.media.playback.granted",
+  "allOf": [
+    {
+      "$ref": "./atomic.schema.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "media.playback.granted"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "object_id": {
+              "type": "string"
+            },
+            "playback_id": {
+              "type": "string"
+            },
+            "audience": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "public",
+                    "known",
+                    "roulette",
+                    "group",
+                    "party",
+                    "stage"
+                  ]
+                },
+                "group_id": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "link": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "type"
+              ],
+              "additionalProperties": false
+            },
+            "method": {
+              "type": "string",
+              "enum": [
+                "webrtc",
+                "hls",
+                "dash"
+              ]
+            },
+            "expires_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "policy_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "key_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "trace_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "object_id",
+            "playback_id",
+            "audience",
+            "method"
+          ]
+        }
+      }
+    }
+  ]
+}

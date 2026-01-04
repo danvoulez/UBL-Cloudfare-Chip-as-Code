@@ -1,0 +1,28 @@
+{
+  "frames": [
+    {
+      "id": "01-prepare",
+      "jsonrpc": "2.0",
+      "method": "tool/call",
+      "params": {
+        "meta": {
+          "version": "v1",
+          "client_id": "agent:smoke",
+          "op_id": "prep-001",
+          "correlation_id": "corr-prep-001",
+          "session_type": "work",
+          "mode": "commitment",
+          "scope": {
+            "tenant": "ubl"
+          }
+        },
+        "tool": "media@v1.stream.prepare",
+        "args": {
+          "mode": "stage",
+          "latency": "ll-hls",
+          "title": "MCP Smoke"
+        }
+      }
+    }
+  ]
+}

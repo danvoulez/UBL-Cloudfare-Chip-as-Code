@@ -1,0 +1,25 @@
+{
+  "id": "01MA7K7K8Z3W1B3C5D6E7F8G9H",
+  "ts": "2026-01-04T09:33:40Z",
+  "kind": "media.upload.presigned",
+  "scope": {
+    "tenant": "ubl",
+    "entity": "cust_42",
+    "room": null,
+    "container": null
+  },
+  "actor": "media-service",
+  "refs": [],
+  "data": {
+    "object_id": "r2://media/ubl/cust_42/2026/01/clip_12345.webm",
+    "content_type": "video/webm",
+    "size_max": 524288000,
+    "expires_at": "2026-01-04T09:33:40Z",
+    "storage_class": "standard",
+    "checksum_alg": "BLAKE3"
+  },
+  "meta": {
+    "v": 1
+  },
+  "sig": null
+}

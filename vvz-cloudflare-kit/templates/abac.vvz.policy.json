@@ -1,0 +1,19 @@
+{
+  "effect": "allow",
+  "scope": {
+    "tenant": "voulezvous",
+    "entity": "*",
+    "room": "*"
+  },
+  "tools": [
+    "messenger@v1.send",
+    "media@v1.*",
+    "stream@v1.*"
+  ],
+  "where": {
+    "session_type": [
+      "work",
+      "assist"
+    ]
+  }
+}

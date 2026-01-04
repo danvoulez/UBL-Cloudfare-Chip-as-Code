@@ -1,0 +1,25 @@
+{
+  "id": "01JPRETENTN",
+  "ts": "2026-01-04T09:36:02Z",
+  "kind": "media.retention.applied",
+  "scope": {
+    "tenant": "ubl",
+    "entity": "user_123"
+  },
+  "actor": "retention-bot",
+  "refs": [
+    "01JPINGESTOK"
+  ],
+  "data": {
+    "object_id": "r2://media/abc123.mp4",
+    "policy_id": "retention_30d_v1",
+    "action": "truncate",
+    "effective_at": "2026-01-04T09:36:02Z",
+    "until": null,
+    "notes": "thumbnail kept; sources rotated"
+  },
+  "meta": {
+    "v": 1
+  },
+  "sig": null
+}

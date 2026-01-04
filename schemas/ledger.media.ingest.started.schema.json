@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Media Ingest Started Event",
+  "description": "JSON✯Atomic event: media.ingest.started — Upload/ingest initiated",
+  "allOf": [
+    { "$ref": "atomic.schema.json" },
+    {
+      "properties": {
+        "kind": {
+          "const": "media.ingest.started"
+        },
+        "data": {
+          "type": "object",
+          "required": ["object_id", "bytes_expected", "method"],
+          "properties": {
+            "object_id": {
+              "type": "string",
+              "description": "Media ID (UUID)"
+            },
+            "bytes_expected": {
+              "type": "integer",
+              "description": "Expected upload size in bytes",
+              "minimum": 1
+            },
+            "method": {
+              "type": "string",
+              "enum": ["presign", "direct", "multipart"],
+              "description": "Upload method"
+            },
+            "trace_id": {
+              "type": "string",
+              "description": "Trace ID for correlation"
+            },
+            "r2_key": {
+              "type": "string",
+              "description": "R2 object key"
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    }
+  ]
+}

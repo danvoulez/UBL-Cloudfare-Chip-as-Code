@@ -1,0 +1,15 @@
+name = "webhooks-worker"
+main = "src/worker.ts"
+compatibility_date = "2024-11-07"
+
+routes = [
+  { pattern = "api.ubl.agency/webhooks/*", zone_id = "3aa18fa819ee4b6e393009916432a69f" }
+]
+
+[[kv_namespaces]]
+binding = "WEBHOOK_SECRETS"
+id = "e1627581b2834ceeb947e983dbfb380f"
+
+[[r2_buckets]]
+binding = "DLQ"
+bucket_name = "ubl-dlq"

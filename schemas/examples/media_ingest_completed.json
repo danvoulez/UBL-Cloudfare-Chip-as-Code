@@ -1,0 +1,42 @@
+{
+  "id": "01JABC1234567890ABCDEFGHIJ",
+  "ts": "2026-01-03T14:22:12.789Z",
+  "kind": "media.ingest.completed",
+  "scope": {
+    "tenant": "ubl",
+    "room": "room_01KXYZ"
+  },
+  "actor": {
+    "email": "dan@ubl.agency",
+    "groups": ["ubl-ops"],
+    "client_id": "ui:web"
+  },
+  "refs": {
+    "object_id": "media_01JABC1234567890ABCDEFGHIJ",
+    "thumb_media_id": "thumb_01JABC1234567890ABCDEFGHIJ"
+  },
+  "data": {
+    "object_id": "media_01JABC1234567890ABCDEFGHIJ",
+    "bytes": 4821334,
+    "duration_ms": 7234,
+    "media": {
+      "type": "image",
+      "width": 1920,
+      "height": 1080
+    },
+    "thumbnails": [
+      {
+        "media_id": "thumb_01JABC1234567890ABCDEFGHIJ",
+        "size": "medium"
+      }
+    ],
+    "trace_id": "trace_01JABC123",
+    "sha256": "9f6a8b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b7c6d5e4f3a2b1c0d9e8f7a"
+  },
+  "meta": {
+    "service": "media-api-worker@v1",
+    "version": "1.0.0",
+    "trace_id": "trace_01JABC123"
+  },
+  "sig": null
+}

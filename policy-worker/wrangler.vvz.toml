@@ -1,0 +1,29 @@
+name = "vvz-edge"
+main = "src/worker.mjs"
+compatibility_date = "2024-11-07"
+
+# ⚠️ Substitua pelo Zone ID real do domínio voulezvous.tv
+# Dica: `wrangler zones list | jq -r '.[] | select(.name==\"voulezvous.tv\") | .id'`
+# OU: `curl -X GET "https://api.cloudflare.com/client/v4/zones?name=voulezvous.tv" -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" | jq -r '.result[0].id'`
+routes = [
+  { pattern = "voulezvous.tv/*",      zone_id = "<VVZ_ZONE_ID>" },
+  { pattern = "www.voulezvous.tv/*",  zone_id = "<VVZ_ZONE_ID>" },
+  { pattern = "admin.voulezvous.tv/*",zone_id = "<VVZ_ZONE_ID>" }
+]
+
+[vars]
+TENANT_DEFAULT = "voulezvous"
+TENANT_HOST_MAP = "{\"api.ubl.agency\":\"ubl\",\"voulezvous.tv\":\"voulezvous\",\"www.voulezvous.tv\":\"voulezvous\",\"admin.voulezvous.tv\":\"voulezvous\"}"
+ACCESS_AUD_MAP = "{\"ubl\":\"<AUD_UBL>\",\"voulezvous\":\"<AUD_VVZ>\"}"
+ACCESS_JWKS_MAP = "{\"ubl\":\"<JWKS_TEAM>\",\"voulezvous\":\"<JWKS_TEAM>\"}"
+ORIGIN_ALLOWLIST = "{\"voulezvous\":[\"https://voulezvous.tv\",\"https://www.voulezvous.tv\"]}"
+POLICY_PUBKEY_B64 = "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUNvd0JRWURLMlZ3QXlFQTkyZlFhcGVqZVhDanEydEZoU1piYnkxQk1lMTNpcmxKRGxnLzFMa2dCaUU9Ci0tLS0tRU5EIFBVQkxJQyBLRVktLS0tLQo="
+
+# Mapeamentos de upstream (o código do worker roteia por prefixo)
+UPSTREAM_CORE = "https://origin.core.vvz.local"
+UPSTREAM_WEBHOOKS = "https://origin.webhooks.vvz.local"
+
+# Bind a mesma KV usada no flagship (políticas por tenant residem nela)
+[[kv_namespaces]]
+binding = "UBL_FLAGS"
+id = "fe402d39cc544ac399bd068f9883dddf"

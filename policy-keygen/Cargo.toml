@@ -1,0 +1,11 @@
+[package]
+name = "policy-keygen"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0"
+clap = { version = "4.5", features = ["derive"] }
+rand = "0.8"
+ed25519-dalek = { version = "2.1", features = ["pkcs8", "rand_core"] }
+base64 = "0.22"

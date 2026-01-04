@@ -1,0 +1,25 @@
+receivers:
+  otlp:
+    protocols:
+      http:
+        endpoint: 0.0.0.0:4318  # OTLP/HTTP (Cloudflare Worker -> Collector)
+
+processors:
+  batch:
+    send_batch_size: 8192
+    timeout: 1s
+
+exporters:
+  # Expose a Prometheus scrape endpoint with the transformed OTLP metrics
+  prometheus:
+    endpoint: 0.0.0.0:9464
+    namespace: omni
+    const_labels:
+      stack: "voulezvous"
+
+service:
+  pipelines:
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [prometheus]

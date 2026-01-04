@@ -1,0 +1,145 @@
+### Blueprint 16 — Contract Tests
+### Substitua <APP_ID> pelo ID do seu app
+### Use WebSocket client (websocat, wscat, ou script Node.js)
+
+### 1. tools/list (filtrado por ABAC)
+WS /mcp
+Content-Type: application/json
+
+{
+  "jsonrpc": "2.0",
+  "id": "1",
+  "method": "tools/list",
+  "params": {
+    "meta": {
+      "version": "v1",
+      "client_id": "app:<APP_ID>",
+      "op_id": "0001",
+      "correlation_id": "c-0001",
+      "session_type": "work",
+      "mode": "commitment",
+      "scope": {
+        "tenant": "ubl",
+        "entity": "demo"
+      }
+    }
+  }
+}
+
+### 2. tool/call — append_link (idempotência)
+WS /mcp
+Content-Type: application/json
+
+{
+  "jsonrpc": "2.0",
+  "id": "2",
+  "method": "tool/call",
+  "params": {
+    "meta": {
+      "version": "v1",
+      "client_id": "app:<APP_ID>",
+      "op_id": "0002",
+      "correlation_id": "c-0002",
+      "session_type": "work",
+      "mode": "commitment",
+      "scope": {
+        "tenant": "ubl",
+        "entity": "demo"
+      }
+    },
+    "tool": "ubl@v1.append_link",
+    "args": {
+      "entity_id": "cust_42",
+      "type": "demo.event",
+      "json": {
+        "k": "v"
+      }
+    }
+  }
+}
+
+### 3. tool/call — append_link (repetição — deve retornar cached:true)
+WS /mcp
+Content-Type: application/json
+
+{
+  "jsonrpc": "2.0",
+  "id": "3",
+  "method": "tool/call",
+  "params": {
+    "meta": {
+      "version": "v1",
+      "client_id": "app:<APP_ID>",
+      "op_id": "0002",
+      "correlation_id": "c-0003",
+      "session_type": "work",
+      "mode": "commitment",
+      "scope": {
+        "tenant": "ubl",
+        "entity": "demo"
+      }
+    },
+    "tool": "ubl@v1.append_link",
+    "args": {
+      "entity_id": "cust_42",
+      "type": "demo.event",
+      "json": {
+        "k": "v"
+      }
+    }
+  }
+}
+
+### 4. session.brief.set sanity (tenant mismatch → FORBIDDEN)
+WS /mcp
+Content-Type: application/json
+
+{
+  "jsonrpc": "2.0",
+  "id": "4",
+  "method": "session.brief.set",
+  "params": {
+    "meta": {
+      "version": "v1",
+      "client_id": "app:<APP_ID>",
+      "op_id": "0004",
+      "correlation_id": "c-0004",
+      "session_type": "assist",
+      "mode": "deliberation",
+      "scope": {
+        "tenant": "ubl"
+      }
+    },
+    "brief": {
+      "tenant": "other",
+      "goal": "x"
+    }
+  }
+}
+
+### 5. tool/call — sem meta (deve retornar INVALID_PARAMS)
+WS /mcp
+Content-Type: application/json
+
+{
+  "jsonrpc": "2.0",
+  "id": "5",
+  "method": "tool/call",
+  "params": {
+    "tool": "ubl@v1.append_link",
+    "args": {
+      "entity_id": "cust_42",
+      "type": "demo.event"
+    }
+  }
+}
+
+### 6. ping (health check)
+WS /mcp
+Content-Type: application/json
+
+{
+  "jsonrpc": "2.0",
+  "id": "6",
+  "method": "ping"
+}

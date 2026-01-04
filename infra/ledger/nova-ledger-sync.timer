@@ -1,0 +1,11 @@
+[Unit]
+Description=Daily sync of UBL Flagship Ledger to R2
+Requires=flagship-ledger-sync.service
+
+[Timer]
+OnCalendar=daily
+RandomizedDelaySec=3600
+Persistent=true
+
+[Install]
+WantedBy=timers.target

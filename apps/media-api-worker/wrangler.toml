@@ -1,0 +1,43 @@
+name = "ubl-media-api"
+main = "src/worker.ts"
+compatibility_date = "2024-11-07"
+
+routes = [
+  { pattern = "media.api.ubl.agency/*", zone_id = "3aa18fa819ee4b6e393009916432a69f" },
+  { pattern = "api.ubl.agency/internal/media/*", zone_id = "3aa18fa819ee4b6e393009916432a69f" },
+  { pattern = "api.ubl.agency/internal/stream/*", zone_id = "3aa18fa819ee4b6e393009916432a69f" },
+  { pattern = "api.ubl.agency/media/*", zone_id = "3aa18fa819ee4b6e393009916432a69f" },
+  { pattern = "api.ubl.agency/rtc/*", zone_id = "3aa18fa819ee4b6e393009916432a69f" }
+]
+
+# R2 buckets
+[[r2_buckets]]
+binding = "R2_MEDIA"
+bucket_name = "ubl-media"
+
+# KV namespaces
+[[kv_namespaces]]
+binding = "KV_MEDIA"
+id = "c0180d5f41844169afc40e67956ce668"
+
+# D1 database
+[[d1_databases]]
+binding = "D1_MEDIA"
+database_name = "ubl-media"
+database_id = "53efdd66-32ff-4e84-8d3b-62eea099810e"
+
+# Queues (for events) - Requer Workers Paid plan
+# [[queues.producers]]
+# queue = "media-events"
+# binding = "QUEUE_MEDIA_EVENTS"
+
+# Environment variables
+[vars]
+MEDIA_API_VERSION = "v1"
+R2_MEDIA_PREFIX = "tenant"
+# Blueprint 13: Stream & RTC
+RTC_WS_URL = "wss://rtc.voulezvous.tv/rooms"
+TURN_SERVERS = "[{\"urls\":[\"stun:stun.l.google.com:19302\"]}]"
+# STREAM_API_TOKEN and STREAM_ACCOUNT_ID should be set as secrets:
+# wrangler secret put STREAM_API_TOKEN
+# wrangler secret put STREAM_ACCOUNT_ID

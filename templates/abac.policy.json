@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "statements": [
+    {
+      "effect": "deny",
+      "scope": {
+        "tenant": "*"
+      },
+      "tools": ["*"],
+      "where": {
+        "session_type": ["*"],
+        "legacy_jwt": ["invalid"]
+      }
+    },
+    {
+      "effect": "deny",
+      "scope": {
+        "tenant": "*"
+      },
+      "tools": ["*"],
+      "where": {
+        "session_type": ["*"],
+        "rate_ok": false
+      }
+    },
+    {
+      "effect": "allow",
+      "scope": {
+        "tenant": "ubl",
+        "entity": "*"
+      },
+      "tools": [
+        "ubl@v1.*",
+        "messenger@v1.send",
+        "media@v1.presign"
+      ],
+      "where": {
+        "session_type": ["work", "assist"]
+      }
+    },
+    {
+      "effect": "allow",
+      "scope": {
+        "tenant": "ubl",
+        "entity": "*",
+        "room": "*"
+      },
+      "tools": [
+        "messenger@v1.send",
+        "media@v1.presign"
+      ],
+      "where": {
+        "session_type": ["work", "assist", "deliberation"]
+      }
+    }
+  ],
+  "eval_order": ["deny", "allow"],
+  "default": "deny"
+}

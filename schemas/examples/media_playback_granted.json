@@ -1,0 +1,29 @@
+{
+  "id": "01JPPLAYBK",
+  "ts": "2026-01-04T09:36:02Z",
+  "kind": "media.playback.granted",
+  "scope": {
+    "tenant": "ubl",
+    "entity": "user_123"
+  },
+  "actor": "system",
+  "refs": [],
+  "data": {
+    "object_id": "r2://media/abc123.mp4",
+    "playback_id": "p_789",
+    "audience": {
+      "type": "stage",
+      "group_id": null,
+      "link": "https://voulezvous.tv/@dan"
+    },
+    "method": "hls",
+    "expires_at": "2026-01-04T09:36:02Z",
+    "policy_id": "pol_live_stage_v1",
+    "key_id": null,
+    "trace_id": "tr_456"
+  },
+  "meta": {
+    "v": 1
+  },
+  "sig": null
+}

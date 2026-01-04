@@ -1,0 +1,29 @@
+{
+  "id": "01HXOFFICETOOLCALLEXAMPLE000000",
+  "ts": "2026-01-04T12:00:00Z",
+  "kind": "office.tool_call",
+  "scope": {
+    "tenant": "ubl",
+    "entity": "cust_42",
+    "room": "room-123"
+  },
+  "actor": "office-session",
+  "refs": [
+    "01HXYZABCDEF00000000000000"
+  ],
+  "data": {
+    "tool": "ubl@v1.append_link",
+    "args_min": {
+      "entity_id": "cust_42",
+      "type": "invoice.created"
+    },
+    "cost": {
+      "calls": 1,
+      "bytes": 0
+    }
+  },
+  "meta": {
+    "v": 1
+  },
+  "sig": null
+}

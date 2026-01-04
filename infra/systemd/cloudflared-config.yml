@@ -1,0 +1,14 @@
+# /etc/cloudflared/config.yml
+# This config binds the named tunnel "vvz-core" to core.voulezvous.tv
+tunnel: vvz-core
+credentials-file: /etc/cloudflared/vvz-core.json
+
+ingress:
+  - hostname: core.voulezvous.tv
+    service: http://127.0.0.1:8787
+  - service: http_status:404
+
+originRequest:
+  # Local core serves HTTP; leave TLS off
+  noTLSVerify: true
+  connectTimeout: 5s

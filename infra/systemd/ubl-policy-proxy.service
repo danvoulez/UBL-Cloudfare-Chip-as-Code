@@ -1,0 +1,16 @@
+[Unit]
+Description=UBL Policy Proxy (Rust)
+After=network.target
+
+[Service]
+Type=simple
+User=ubl-ops
+WorkingDirectory=/opt/ubl-policy-proxy
+ExecStart=/opt/ubl-policy-proxy/ubl-policy-proxy
+Restart=always
+RestartSec=5
+Environment="PUBLIC_KEY=your-ed25519-public-key-base64"
+Environment="RUST_LOG=info"
+
+[Install]
+WantedBy=multi-user.target

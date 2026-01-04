@@ -1,0 +1,96 @@
+# UBL Agency — Semantic Chip (Access Control) — v3.0
+# Conforme CONSTITUTION.md (2026-01-03)
+# ID: ubl_access_chip_v3
+version: "tdln-chip/0.3"
+
+meta:
+  intent: "Conceder apenas acessos provados e roteados; toda decisão é registrada"
+  owners: ["ubl-ops"]
+
+# 1) Bits de Política (verdade binária sobre o contexto)
+policies:
+  - id: P_Transport_Secure
+    description: "TLS 1.3+"
+    logic: "context.transport.tls_version >= 1.3"
+
+  - id: P_Device_Identity
+    description: "mTLS válido pela CA interna"
+    logic: "context.mtls.verified == true AND (context.mtls.issuer == 'Cloudflare Edge' OR context.mtls.issuer == 'UBL Local CA')"
+
+  - id: P_User_Passkey
+    description: "WebAuthn no domínio app.ubl.agency"
+    logic: "context.auth.method IN ['access-passkey','webauthn'] AND context.auth.rp_id == 'app.ubl.agency'"
+
+  - id: P_Role_Admin
+    description: "Usuário pertence a ubl-ops"
+    logic: "'ubl-ops' IN context.user.groups"
+
+  - id: P_Is_Admin_Path
+    description: "Rota administrativa"
+    logic: "context.req.path STARTS_WITH '/admin/'"
+
+  - id: P_Rate_Bucket_OK
+    description: "Dentro do limite de taxa por identidade"
+    logic: "context.rate.ok == true"
+
+  - id: P_Webhook_Verified
+    description: "Webhook assinado e verificado no Edge"
+    logic: "context.webhook.verified == true"
+
+  - id: P_Legacy_JWT
+    description: "Compat legada com prazo curto (desabilitado por padrão)"
+    logic: "context.legacy_jwt.valid == true AND now() < context.legacy_jwt.expires_at"
+
+  - id: P_Circuit_Breaker
+    description: "Modo emergência (break-glass) ativo"
+    logic: "system.panic_mode == true"
+
+# 2) Fiação (como os bits se compõem)
+wiring:
+  - id: W_ZeroTrust_Standard
+    structure:
+      sequence: [P_Transport_Secure, P_Device_Identity, P_User_Passkey, P_Rate_Bucket_OK]
+
+  - id: W_Admin_Path_And_Role
+    structure:
+      sequence: [W_ZeroTrust_Standard, P_Is_Admin_Path, P_Role_Admin]
+
+  - id: W_Webhook_Trusted
+    structure:
+      sequence: [P_Webhook_Verified]
+
+  - id: W_Public_Warmup
+    structure:
+      sequence: []
+
+  - id: W_Emergency_Override
+    structure:
+      parallel:
+        policies: [W_ZeroTrust_Standard, P_Circuit_Breaker]
+        aggregator: ANY  # se P_Circuit_Breaker for true, libera
+
+# 3) Saídas (o que materializar quando um fio dispara)
+outputs:
+  - deny_rate_limit:
+      trigger: NOT(P_Rate_Bucket_OK)
+      action: "HTTP 429 + LogLine(reason: rate_limit)"
+
+  - allow_admin_write:
+      trigger: W_Admin_Path_And_Role
+      action: "HTTP 200 + Enable Write Operations"
+
+  - allow_webhook:
+      trigger: W_Webhook_Trusted
+      action: "HTTP 204 + Acknowledge"
+
+  - allow_standard_access:
+      trigger: W_ZeroTrust_Standard
+      action: "HTTP 200 + Read/Write conforme rota não-admin"
+
+  - allow_public_warmup:
+      trigger: W_Public_Warmup
+      action: "HTTP 200 + Warm"
+
+  - deny_invalid_access:
+      trigger: NOT(W_ZeroTrust_Standard)
+      action: "HTTP 403 + LogLine(reason: policy_fail)"

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Stage Player — Blueprint 13</title>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+</head>
+<body>
+  <h1>Stage Player (HLS, sem reload)</h1>
+  <video id="stage" playsinline controls width="800"></video>
+  
+  <div>
+    <input type="text" id="inputId" placeholder="input_id (e.g., li_01JABC...)" value="li_01JABC...">
+    <button onclick="loadStream()">Load Stream</button>
+    <button onclick="swapStream()">Swap Stream</button>
+  </div>
+  
+  <script>
+    let hls;
+    const video = document.getElementById('stage');
+    
+    async function loadStream() {
+      const inputId = document.getElementById('inputId').value;
+      
+      // Get signed URL
+      const res = await fetch('https://api.ubl.agency/media/tokens/stream', {
+        method: 'POST',
+        headers: {'content-type':'application/json'},
+        body: JSON.stringify({ 
+          input_id: inputId, 
+          format: 'hls', 
+          ttl_sec: 300, 
+          aud: 'viewer' 
+        })
+      });
+      const { url } = await res.json();
+      
+      if (Hls.isSupported()) {
+        if (hls) hls.destroy();
+        hls = new Hls({ enableWorker: true, lowLatencyMode: true });
+        hls.loadSource(url);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
+      } else {
+        video.src = url;
+        video.play();
+      }
+    }
+    
+    async function swapStream() {
+      const newInputId = prompt('New input_id:');
+      if (!newInputId) return;
+      
+      const r = await fetch('https://api.ubl.agency/media/tokens/stream', {
+        method: 'POST',
+        headers: {'content-type':'application/json'},
+        body: JSON.stringify({ 
+          input_id: newInputId, 
+          format: 'hls', 
+          ttl_sec: 300, 
+          aud: 'viewer' 
+        })
+      });
+      const { url: nextUrl } = await r.json();
+      
+      if (hls) {
+        hls.loadSource(nextUrl); // Troca suave no mesmo <video>
+      } else {
+        video.src = nextUrl;
+      }
+    }
+    
+    // Auto-load on page load
+    window.onload = () => {
+      if (document.getElementById('inputId').value) {
+        loadStream();
+      }
+    };
+  </script>
+</body>
+</html>

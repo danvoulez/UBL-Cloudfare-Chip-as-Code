@@ -1,0 +1,21 @@
+[package]
+name = "policy-proxy"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+axum = { version = "0.7", features = ["macros"] }
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "signal"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+serde_yaml = "0.9"
+reqwest = { version = "0.12", features = ["json", "gzip", "brotli", "deflate", "rustls-tls"] }
+anyhow = "1.0"
+time = { version = "0.3", features = ["formatting", "parsing"] }
+chrono = "0.4"
+blake3 = "1.5"
+ed25519-dalek = { version = "2", features = ["pkcs8"] }
+base64 = "0.22"
+parking_lot = "0.12"
+hex = "0.4"
+policy-engine = { path = "../policy-engine" }

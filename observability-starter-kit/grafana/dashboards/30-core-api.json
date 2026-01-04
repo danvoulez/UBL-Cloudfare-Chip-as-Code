@@ -1,0 +1,80 @@
+{
+  "dashboard": {
+    "title": "Core API — DB & Throughput",
+    "tags": ["core", "api", "database"],
+    "timezone": "browser",
+    "panels": [
+      {
+        "id": 1,
+        "title": "DB Query Latency",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.50, sum(rate(core_db_query_seconds_bucket[5m])) by (le, op))",
+            "legendFormat": "p50 {{op}}"
+          },
+          {
+            "expr": "histogram_quantile(0.95, sum(rate(core_db_query_seconds_bucket[5m])) by (le, op))",
+            "legendFormat": "p95 {{op}}"
+          },
+          {
+            "expr": "histogram_quantile(0.99, sum(rate(core_db_query_seconds_bucket[5m])) by (le, op))",
+            "legendFormat": "p99 {{op}}"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0}
+      },
+      {
+        "id": 2,
+        "title": "Rate Limit Hits",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "sum(rate(core_rate_limit_hits_total[5m])) by (bucket)",
+            "legendFormat": "{{bucket}}"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0}
+      },
+      {
+        "id": 3,
+        "title": "Throughput by Tenant",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "sum(rate(core_http_requests_total[5m])) by (tenant)",
+            "legendFormat": "{{tenant}}"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 24, "x": 0, "y": 8}
+      },
+      {
+        "id": 4,
+        "title": "Media Presigns",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "sum(rate(media_presign_total{ok=\"true\"}[5m]))",
+            "legendFormat": "Presigns OK"
+          }
+        ],
+        "gridPos": {"h": 4, "w": 6, "x": 0, "y": 16}
+      },
+      {
+        "id": 5,
+        "title": "Presign Failures",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "sum(rate(media_presign_total{ok=\"false\"}[5m]))",
+            "legendFormat": "Presigns FAIL"
+          }
+        ],
+        "gridPos": {"h": 4, "w": 6, "x": 6, "y": 16}
+      }
+    ],
+    "refresh": "30s",
+    "schemaVersion": 27,
+    "version": 1
+  }
+}

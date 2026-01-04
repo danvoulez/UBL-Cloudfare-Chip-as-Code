@@ -1,0 +1,96 @@
+{
+  "dashboard": {
+    "title": "Gateway — Latência & Access",
+    "tags": ["gateway", "worker", "access"],
+    "timezone": "browser",
+    "panels": [
+      {
+        "id": 1,
+        "title": "HTTP Requests Rate",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "sum(rate(gateway_http_requests_total[5m])) by (route, method)",
+            "legendFormat": "{{route}} {{method}}"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0}
+      },
+      {
+        "id": 2,
+        "title": "Latency p50/p95/p99",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.50, sum(rate(gateway_http_request_duration_seconds_bucket[5m])) by (le, route))",
+            "legendFormat": "p50 {{route}}"
+          },
+          {
+            "expr": "histogram_quantile(0.95, sum(rate(gateway_http_request_duration_seconds_bucket[5m])) by (le, route))",
+            "legendFormat": "p95 {{route}}"
+          },
+          {
+            "expr": "histogram_quantile(0.99, sum(rate(gateway_http_request_duration_seconds_bucket[5m])) by (le, route))",
+            "legendFormat": "p99 {{route}}"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0}
+      },
+      {
+        "id": 3,
+        "title": "Error Rate by Route",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "sum(rate(gateway_http_requests_total{code=~\"5..\"}[5m])) by (route) / sum(rate(gateway_http_requests_total[5m])) by (route)",
+            "legendFormat": "{{route}}"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}
+      },
+      {
+        "id": 4,
+        "title": "Backpressure Count",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "sum(increase(gateway_backpressure_count[5m]))",
+            "legendFormat": "Backpressure"
+          }
+        ],
+        "gridPos": {"h": 4, "w": 6, "x": 12, "y": 8}
+      },
+      {
+        "id": 5,
+        "title": "Access/JWKS Health",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "sum(rate(jwks_refresh_failure_total[5m]))",
+            "legendFormat": "JWKS Failures"
+          }
+        ],
+        "gridPos": {"h": 4, "w": 6, "x": 18, "y": 8}
+      },
+      {
+        "id": 6,
+        "title": "Webhook Deliveries",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "sum(rate(webhook_delivery_total{ok=\"true\"}[5m])) by (dest)",
+            "legendFormat": "OK {{dest}}"
+          },
+          {
+            "expr": "sum(rate(webhook_delivery_total{ok=\"false\"}[5m])) by (dest)",
+            "legendFormat": "FAIL {{dest}}"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 24, "x": 0, "y": 12}
+      }
+    ],
+    "refresh": "30s",
+    "schemaVersion": 27,
+    "version": 1
+  }
+}

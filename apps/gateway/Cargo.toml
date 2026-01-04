@@ -1,0 +1,29 @@
+[package]
+name = "gateway"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "time"] }
+axum = { version = "0.7", features = ["ws", "macros"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+uuid = { version = "1", features = ["v4"] }
+moka = { version = "0.12", features = ["future"] }
+thiserror = "1"
+anyhow = "1.0"
+# Identity & Access (ES256 - ECDSA P-256)
+jsonwebtoken = { version = "9", features = ["pem"] }
+p256 = { version = "0.13", features = ["ecdsa", "pkcs8"] }
+ecdsa = { version = "0.16", features = ["pem"] }
+rand_core = "0.6"
+base64 = "0.22"
+ulid = "1.1"
+time = { version = "0.3", features = ["formatting", "parsing"] }
+cookie = { version = "0.18", features = ["private", "signed"] }
+hex = "0.4"
+rand = "0.8"
+axum-extra = { version = "0.4", features = ["cookie"] }
+async-trait = "0.1"

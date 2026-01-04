@@ -1,0 +1,43 @@
+# Wiring — Roteamento DRY → Core API/Gateway
+# Blueprint 16 — Constituição & Anexos
+
+routes:
+  - name: "append_link"
+    mcp_tool: "ubl@v1.append_link"
+    internal_rest: "POST /internal/ubl/append_link"
+    schema: "schemas/append_link.request.json"
+    outputs:
+      on_success: "201"
+      on_forbidden: "FORBIDDEN"
+      on_rate: "RATE_LIMIT"
+  
+  - name: "messenger_send"
+    mcp_tool: "messenger@v1.send"
+    internal_rest: "POST /internal/messenger/send"
+    schema: "schemas/messenger.send.request.json"
+    outputs:
+      on_success: "200"
+      on_forbidden: "FORBIDDEN"
+      on_rate: "RATE_LIMIT"
+  
+  - name: "media_presign"
+    mcp_tool: "media@v1.presign"
+    internal_rest: "POST /internal/media/presign"
+    schema: "schemas/media.presign.request.json"
+    outputs:
+      on_success: "200"
+      on_forbidden: "FORBIDDEN"
+      on_rate: "RATE_LIMIT"
+
+guards:
+  - name: "W_Public_Warmup"
+    when: "context.req.path == '/warmup'"
+    effect: "allow_public_warmup"
+  
+  - name: "W_Webhook_Trusted"
+    when: "context.webhook.verified == true"
+    effect: "allow_webhook"
+  
+  - name: "W_ZeroTrust_Standard"
+    when: "P_Transport_Secure AND P_Device_Identity AND P_User_Passkey"
+    effect: "allow_standard_access"

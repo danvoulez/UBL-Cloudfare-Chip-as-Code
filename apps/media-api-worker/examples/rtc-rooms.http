@@ -1,0 +1,15 @@
+### Blueprint 13 — RTC/WebRTC Examples
+
+### 1. Create/Resolve RTC Room
+POST https://api.ubl.agency/rtc/rooms
+Content-Type: application/json
+
+{
+  "room_kind": "circle",
+  "room_id": "room_01KXYZ",
+  "max_participants": 8,
+  "record": false
+}
+
+### 2. Join Room (Browser JavaScript)
+# See examples/rtc-join.js

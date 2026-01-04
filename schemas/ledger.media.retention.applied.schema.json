@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ledger.media.retention.applied",
+  "allOf": [
+    {
+      "$ref": "./atomic.schema.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "media.retention.applied"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "object_id": {
+              "type": "string"
+            },
+            "policy_id": {
+              "type": "string"
+            },
+            "action": {
+              "type": "string",
+              "enum": [
+                "delete",
+                "truncate",
+                "anonymize",
+                "freeze"
+              ]
+            },
+            "effective_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "until": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date-time"
+            },
+            "notes": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "object_id",
+            "policy_id",
+            "action",
+            "effective_at"
+          ]
+        }
+      }
+    }
+  ]
+}

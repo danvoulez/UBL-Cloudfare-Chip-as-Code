@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Media Upload Presigned Event",
+  "description": "JSON✯Atomic event: media.upload.presigned — R2 presign URL issued",
+  "allOf": [
+    { "$ref": "atomic.schema.json" },
+    {
+      "properties": {
+        "kind": {
+          "const": "media.upload.presigned"
+        },
+        "data": {
+          "type": "object",
+          "required": ["object_id", "content_type", "size_max", "expires_at"],
+          "properties": {
+            "object_id": {
+              "type": "string",
+              "description": "Media ID (UUID)"
+            },
+            "content_type": {
+              "type": "string",
+              "description": "MIME type (e.g., image/jpeg, video/mp4)"
+            },
+            "size_max": {
+              "type": "integer",
+              "description": "Maximum upload size in bytes",
+              "minimum": 1
+            },
+            "expires_at": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Presign URL expiration (ISO-8601)"
+            },
+            "r2_key": {
+              "type": "string",
+              "description": "R2 object key (path)"
+            },
+            "room_id": {
+              "type": "string",
+              "description": "Room ID (optional)"
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    }
+  ]
+}

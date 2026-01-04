@@ -1,0 +1,95 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Media Ingest Completed Event",
+  "description": "JSON✯Atomic event: media.ingest.completed — Upload/ingest finished",
+  "allOf": [
+    { "$ref": "atomic.schema.json" },
+    {
+      "properties": {
+        "kind": {
+          "const": "media.ingest.completed"
+        },
+        "data": {
+          "type": "object",
+          "required": ["object_id", "bytes"],
+          "properties": {
+            "object_id": {
+              "type": "string",
+              "description": "Media ID (UUID)"
+            },
+            "bytes": {
+              "type": "integer",
+              "description": "Actual uploaded size in bytes",
+              "minimum": 1
+            },
+            "duration_ms": {
+              "type": "integer",
+              "description": "Upload duration in milliseconds",
+              "minimum": 0
+            },
+            "media": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": ["image", "video", "audio", "document", "other"]
+                },
+                "width": {
+                  "type": "integer",
+                  "description": "Image/video width (pixels)",
+                  "minimum": 1
+                },
+                "height": {
+                  "type": "integer",
+                  "description": "Image/video height (pixels)",
+                  "minimum": 1
+                },
+                "duration_s": {
+                  "type": "number",
+                  "description": "Video/audio duration (seconds)",
+                  "minimum": 0
+                },
+                "codecs": {
+                  "type": "array",
+                  "items": { "type": "string" },
+                  "description": "Codec list (e.g., [\"h264\", \"aac\"])"
+                }
+              },
+              "additionalProperties": false
+            },
+            "thumbnails": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "media_id": { "type": "string" },
+                  "size": { "type": "string", "enum": ["small", "medium", "large"] }
+                },
+                "required": ["media_id", "size"],
+                "additionalProperties": false
+              }
+            },
+            "playlist": {
+              "type": "object",
+              "properties": {
+                "hls_url": { "type": "string" },
+                "dash_url": { "type": "string" }
+              },
+              "additionalProperties": false
+            },
+            "trace_id": {
+              "type": "string",
+              "description": "Trace ID for correlation"
+            },
+            "sha256": {
+              "type": "string",
+              "description": "SHA-256 hash of uploaded content",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    }
+  ]
+}

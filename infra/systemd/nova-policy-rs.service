@@ -1,0 +1,22 @@
+[Unit]
+Description=UBL Policy Proxy (Rust/Axum)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=ubl-ops
+Group=ubl-ops
+Environment=UPSTREAM=http://127.0.0.1:9453
+Environment=POLICY_PUBKEY_PEM_B64=__FILL_ME__
+Environment=POLICY_YAML=/etc/ubl/flagship/policy/ubl_core_v1.yaml
+Environment=POLICY_PACK=/etc/ubl/flagship/policy/pack.json
+ExecStart=/opt/ubl/flagship/bin/flagship-policy-rs
+WorkingDirectory=/opt/ubl/flagship
+Restart=on-failure
+RestartSec=2s
+AmbientCapabilities=
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

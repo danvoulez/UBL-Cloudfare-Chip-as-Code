@@ -1,0 +1,16 @@
+[Unit]
+Description=UBL Nova Ledger Sync to R2
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=ubl-ops
+Group=ubl-ops
+EnvironmentFile=/etc/ubl/nova/r2.env
+ExecStart=/opt/ubl/nova/bin/ledger-sync-r2.sh
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

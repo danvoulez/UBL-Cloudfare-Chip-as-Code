@@ -1,0 +1,102 @@
+# Voulezvous — Semantic Chip (Access Control) — v1.0
+# Tenant: voulezvous (OMNI/TV/Party app)
+# ID: vvz_core_v1
+version: "tdln-chip/0.1"
+
+meta:
+  intent: "Zero-Trust para app OMNI/TV/Party; MCP habilitado; CORS para voulezvous.tv"
+  owners: ["voulezvous-ops"]
+  tenant: "voulezvous"
+
+# 1) Bits de Política (verdade binária sobre o contexto)
+policies:
+  - id: P_Transport_Secure
+    description: "TLS 1.3+"
+    logic: "context.transport.tls_version >= 1.3"
+
+  - id: P_Device_Identity
+    description: "mTLS válido pela CA interna"
+    logic: "context.mtls.verified == true AND (context.mtls.issuer == 'Cloudflare Edge' OR context.mtls.issuer == 'UBL Local CA')"
+
+  - id: P_User_Passkey
+    description: "WebAuthn no domínio app.ubl.agency ou voulezvous.tv"
+    logic: "context.auth.method IN ['access-passkey','webauthn'] AND (context.auth.rp_id == 'app.ubl.agency' OR context.auth.rp_id == 'voulezvous.tv')"
+
+  - id: P_Is_MCP
+    description: "Rota MCP (WebSocket JSON-RPC)"
+    logic: "context.req.path == '/mcp' OR context.req.path STARTS_WITH '/mcp/'"
+
+  - id: P_Is_Admin_Path
+    description: "Rota administrativa (requer Access JWT)"
+    logic: "context.req.path STARTS_WITH '/admin/'"
+
+  - id: P_Is_App_Origin
+    description: "Origem permitida (voulezvous.tv)"
+    logic: "context.origin IN ['https://voulezvous.tv', 'https://www.voulezvous.tv']"
+
+  - id: P_Rate_Bucket_OK
+    description: "Dentro do limite de taxa por identidade"
+    logic: "context.rate.ok == true"
+
+  - id: P_Circuit_Breaker
+    description: "Modo emergência (break-glass) ativo"
+    logic: "system.panic_mode == true"
+
+# 2) Fiação (como os bits se compõem)
+wiring:
+  - id: W_ZeroTrust_Standard
+    structure:
+      sequence: [P_Transport_Secure, P_Device_Identity, P_User_Passkey, P_Rate_Bucket_OK]
+
+  - id: W_App_ZeroTrust
+    structure:
+      sequence: [W_ZeroTrust_Standard, P_Is_App_Origin]
+
+  - id: W_MCP_Access
+    structure:
+      sequence: [W_ZeroTrust_Standard, P_Is_MCP]
+
+  - id: W_Admin_Access
+    description: "Acesso admin requer Zero Trust + rota admin"
+    structure:
+      sequence: [W_ZeroTrust_Standard, P_Is_Admin_Path]
+
+  - id: W_Public_Warmup
+    structure:
+      sequence: []
+
+  - id: W_Emergency_Override
+    structure:
+      parallel:
+        policies: [W_ZeroTrust_Standard, P_Circuit_Breaker]
+        aggregator: ANY  # se P_Circuit_Breaker for true, libera
+
+# 3) Saídas (o que materializar quando um fio dispara)
+outputs:
+  - deny_rate_limit:
+      trigger: NOT(P_Rate_Bucket_OK)
+      action: "HTTP 429 + LogLine(reason: rate_limit)"
+
+  - allow_mcp:
+      trigger: W_MCP_Access
+      action: "HTTP 200 + Enable MCP WebSocket"
+
+  - allow_app_access:
+      trigger: W_App_ZeroTrust
+      action: "HTTP 200 + Read/Write conforme rota não-admin"
+
+  - allow_admin_access:
+      trigger: W_Admin_Access
+      action: "HTTP 200 + Enable Admin Operations (requer Access JWT)"
+
+  - allow_standard_access:
+      trigger: W_ZeroTrust_Standard
+      action: "HTTP 200 + Read/Write conforme rota não-admin"
+
+  - allow_public_warmup:
+      trigger: W_Public_Warmup
+      action: "HTTP 200 + Warm"
+
+  - deny_invalid_access:
+      trigger: NOT(W_ZeroTrust_Standard)
+      action: "HTTP 403 + LogLine(reason: policy_fail)"

@@ -1,0 +1,32 @@
+### Blueprint 13 — Stage (Live + VOD) Examples
+
+### 1. Create Live Input
+POST https://api.ubl.agency/media/stream-live/inputs
+Content-Type: application/json
+
+{
+  "channel_id": "stage:dan",
+  "record": true,
+  "dvr": true,
+  "latency": "low"
+}
+
+### 2. Publish with ffmpeg (RTMPS)
+# ffmpeg -re -i input.mp4 \
+#   -c:v libx264 -preset veryfast -b:v 2500k -c:a aac -b:a 128k \
+#   -f flv "rtmps://ingest.example/live/li_01JABC..._KEY"
+
+### 3. Issue Signed URL for Playback
+POST https://api.ubl.agency/media/tokens/stream
+Content-Type: application/json
+
+{
+  "input_id": "li_01JABC...",
+  "format": "hls",
+  "ttl_sec": 300,
+  "aud": "viewer",
+  "claims": {
+    "tenant": "ubl",
+    "user": "viewer_123"
+  }
+}

@@ -1,0 +1,76 @@
+# Secrets e configuração local
+env
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# Rust
+target/
+Cargo.lock
+**/*.rs.bk
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+.pnpm-debug.log*
+
+# Cloudflare Workers
+.wrangler/
+dist/
+worker-configuration.d.ts
+
+# Build artifacts
+*.wasm
+*.tar
+*.tar.gz
+*.zip
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+*.log
+logs/
+*.ndjson
+
+# Temporários
+tmp/
+temp/
+*.tmp
+
+# Archive (código antigo - não commitar)
+archive/
+
+# Docker
+docker-compose.override.yml
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+
+# Backup files
+*.bak
+*.backup
+*~

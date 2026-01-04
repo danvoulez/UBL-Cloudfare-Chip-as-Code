@@ -1,0 +1,61 @@
+{
+  "jsonrpc": "2.0",
+  "name": "<APP_ID>",
+  "version": "v1",
+  "tools": [
+    {
+      "name": "ubl@v1.append_link",
+      "description": "Append link to entity timeline",
+      "params_min": {
+        "entity_id": "string",
+        "type": "string",
+        "json": "object"
+      },
+      "returns": {
+        "ok": "boolean",
+        "link_id": "string"
+      }
+    },
+    {
+      "name": "messenger@v1.send",
+      "description": "Send encrypted message to room",
+      "params_min": {
+        "room_id": "string",
+        "envelope": "CipherEnvelope"
+      },
+      "returns": {
+        "ok": "boolean",
+        "message_id": "string"
+      }
+    },
+    {
+      "name": "media@v1.presign",
+      "description": "Get presigned URL for media upload",
+      "params_min": {
+        "room_id": "string",
+        "mime": "string",
+        "bytes": "number"
+      },
+      "returns": {
+        "media_id": "string",
+        "upload": {
+          "url": "string",
+          "headers": "object"
+        }
+      }
+    }
+  ],
+  "meta_required": [
+    "version",
+    "client_id",
+    "op_id",
+    "correlation_id",
+    "session_type",
+    "mode",
+    "scope"
+  ],
+  "meta_optional": [
+    "trace_id",
+    "user_id"
+  ]
+}

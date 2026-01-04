@@ -1,0 +1,133 @@
+{
+  "id": null,
+  "uid": "media-latency-v1",
+  "title": "Media API — Upload Latency & Success",
+  "tags": ["voulezvous", "media", "r2", "p1"],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "10s",
+  "templating": {
+    "list": [
+      {
+        "name": "datasource",
+        "type": "datasource",
+        "query": "prometheus",
+        "current": { "text": "Prometheus", "value": "Prometheus" }
+      },
+      {
+        "name": "metric_http_bucket",
+        "type": "constant",
+        "query": "http_server_request_duration_seconds_bucket",
+        "label": "Prom metric (histogram buckets)"
+      },
+      {
+        "name": "metric_http_total",
+        "type": "constant",
+        "query": "http_requests_total",
+        "label": "Prom metric (request counter)"
+      },
+      {
+        "name": "label_service",
+        "type": "constant",
+        "query": "service",
+        "label": "Label do serviço (ex.: service|job)"
+      },
+      {
+        "name": "service",
+        "type": "query",
+        "datasource": "$datasource",
+        "query": "label_values($metric_http_total, $label_service)",
+        "includeAll": false,
+        "refresh": 1,
+        "current": { "text": "media-api", "value": "media-api" }
+      },
+      {
+        "name": "label_route",
+        "type": "constant",
+        "query": "route",
+        "label": "Label da rota"
+      },
+      {
+        "name": "route",
+        "type": "custom",
+        "label": "Rotas",
+        "query": "/internal/media/presign, /internal/media/commit, /internal/media/link",
+        "current": { "text": "/internal/media/presign", "value": "/internal/media/presign" }
+      },
+      {
+        "name": "tenant_label",
+        "type": "constant",
+        "query": "tenant",
+        "label": "Label do tenant"
+      },
+      {
+        "name": "tenant",
+        "type": "query",
+        "datasource": "$datasource",
+        "query": "label_values($metric_http_total, $tenant_label)",
+        "includeAll": true,
+        "refresh": 1
+      }
+    ]
+  },
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Success rate (5m)",
+      "gridPos": { "x": 0, "y": 0, "w": 6, "h": 4 },
+      "options": { "colorMode": "value", "graphMode": "none", "reduceOptions": { "calcs": ["lastNotNull"] } },
+      "targets": [
+        {
+          "datasource": "$datasource",
+          "expr": "sum(rate($metric_http_total{${label_service}=\"$service\", status=~\"2..\", $tenant_label=~\"$tenant\"}[5m])) / sum(rate($metric_http_total{${label_service}=\"$service\", $tenant_label=~\"$tenant\"}[5m]))",
+          "legendFormat": "success"
+        }
+      ]
+    },
+    {
+      "type": "stat",
+      "title": "Requests /s (5m)",
+      "gridPos": { "x": 6, "y": 0, "w": 6, "h": 4 },
+      "options": { "colorMode": "value", "graphMode": "none", "reduceOptions": { "calcs": ["lastNotNull"] } },
+      "targets": [
+        {
+          "datasource": "$datasource",
+          "expr": "sum(rate($metric_http_total{${label_service}=\"$service\", $tenant_label=~\"$tenant\"}[5m]))",
+          "legendFormat": "rps"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Latency P50/P95 — $route (5m)",
+      "gridPos": { "x": 0, "y": 4, "w": 12, "h": 9 },
+      "fieldConfig": { "defaults": { "unit": "s" } },
+      "targets": [
+        {
+          "datasource": "$datasource",
+          "expr": "histogram_quantile(0.50, sum by (le) (rate($metric_http_bucket{${label_service}=\"$service\", $label_route=\"$route\", $tenant_label=~\"$tenant\"}[5m])))",
+          "legendFormat": "p50"
+        },
+        {
+          "datasource": "$datasource",
+          "expr": "histogram_quantile(0.95, sum by (le) (rate($metric_http_bucket{${label_service}=\"$service\", $label_route=\"$route\", $tenant_label=~\"$tenant\"}[5m])))",
+          "legendFormat": "p95"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Latency P95 por rota (comparativo)",
+      "gridPos": { "x": 0, "y": 13, "w": 12, "h": 9 },
+      "fieldConfig": { "defaults": { "unit": "s" } },
+      "targets": [
+        {
+          "datasource": "$datasource",
+          "expr": "histogram_quantile(0.95, sum by (le, $label_route) (rate($metric_http_bucket{${label_service}=\"$service\", $tenant_label=~\"$tenant\"}[5m])))",
+          "legendFormat": "{{${"$label_route"}}}"
+        }
+      ]
+    }
+  ]
+}

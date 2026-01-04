@@ -1,0 +1,158 @@
+# Prometheus Alerting Rules (Blueprint 09)
+# Multi-burn rate SLO alerts
+
+groups:
+  - name: gateway_slo
+    interval: 30s
+    rules:
+      - alert: GatewayLatencyHigh
+        expr: |
+          histogram_quantile(0.99, 
+            sum(rate(gateway_http_request_duration_seconds_bucket[5m])) by (le, route)
+          ) > 0.3
+        for: 5m
+        labels:
+          severity: warning
+          component: gateway
+        annotations:
+          summary: "Gateway p99 latency > 300ms (5m window)"
+          description: "Route {{ $labels.route }} p99 = {{ $value }}s"
+
+      - alert: GatewayLatencyHigh30m
+        expr: |
+          histogram_quantile(0.99,
+            sum(rate(gateway_http_request_duration_seconds_bucket[30m])) by (le, route)
+          ) > 0.3
+        for: 10m
+        labels:
+          severity: critical
+          component: gateway
+        annotations:
+          summary: "Gateway p99 latency > 300ms (30m window)"
+          description: "Route {{ $labels.route }} p99 = {{ $value }}s"
+
+      - alert: GatewayErrorRateHigh
+        expr: |
+          sum(rate(gateway_http_requests_total{code=~"5.."}[5m])) by (route)
+          /
+          sum(rate(gateway_http_requests_total[5m])) by (route)
+          > 0.01
+        for: 5m
+        labels:
+          severity: warning
+          component: gateway
+        annotations:
+          summary: "Gateway error rate > 1% (5m)"
+          description: "Route {{ $labels.route }} error rate = {{ $value | humanizePercentage }}"
+
+      - alert: GatewayErrorRateHigh1h
+        expr: |
+          sum(rate(gateway_http_requests_total{code=~"5.."}[1h])) by (route)
+          /
+          sum(rate(gateway_http_requests_total[1h])) by (route)
+          > 0.003
+        for: 15m
+        labels:
+          severity: critical
+          component: gateway
+        annotations:
+          summary: "Gateway error rate > 0.3% (1h window)"
+          description: "Route {{ $labels.route }} error rate = {{ $value | humanizePercentage }}"
+
+  - name: office_mcp
+    interval: 30s
+    rules:
+      - alert: OfficeBackpressureHigh
+        expr: |
+          sum(rate(office_mcp_call_total{ok="false",err="BACKPRESSURE"}[15m])) by (tool)
+          /
+          sum(rate(office_mcp_call_total[15m])) by (tool)
+          > 0.02
+        for: 5m
+        labels:
+          severity: warning
+          component: office
+        annotations:
+          summary: "Office MCP BACKPRESSURE > 2% (15m)"
+          description: "Tool {{ $labels.tool }} backpressure rate = {{ $value | humanizePercentage }}"
+
+      - alert: OfficeWSLatencyHigh
+        expr: |
+          histogram_quantile(0.95,
+            sum(rate(office_ws_reconnect_ms_bucket[5m])) by (le)
+          ) > 500
+        for: 5m
+        labels:
+          severity: warning
+          component: office
+        annotations:
+          summary: "Office WS reconnect p95 > 500ms"
+          description: "WS reconnect p95 = {{ $value }}ms"
+
+      - alert: OfficeMCPLatencyHigh
+        expr: |
+          histogram_quantile(0.99,
+            sum(rate(office_mcp_call_duration_seconds_bucket[5m])) by (le, tool)
+          ) > 0.3
+        for: 5m
+        labels:
+          severity: warning
+          component: office
+        annotations:
+          summary: "Office MCP tool/call p99 > 300ms"
+          description: "Tool {{ $labels.tool }} p99 = {{ $value }}s"
+
+  - name: core_api
+    interval: 30s
+    rules:
+      - alert: CoreDBLatencyHigh
+        expr: |
+          histogram_quantile(0.99,
+            sum(rate(core_db_query_seconds_bucket[5m])) by (le, op)
+          ) > 0.5
+        for: 5m
+        labels:
+          severity: warning
+          component: core
+        annotations:
+          summary: "Core DB query p99 > 500ms"
+          description: "Operation {{ $labels.op }} p99 = {{ $value }}s"
+
+      - alert: CoreRateLimitHits
+        expr: |
+          rate(core_rate_limit_hits_total[5m]) > 10
+        for: 5m
+        labels:
+          severity: info
+          component: core
+        annotations:
+          summary: "Core rate limit hits > 10/min"
+          description: "Rate limit hits = {{ $value }}/s"
+
+  - name: policy_proxy
+    interval: 30s
+    rules:
+      - alert: PolicyDenyRateHigh
+        expr: |
+          sum(rate(policy_eval_total{decision="deny"}[5m])) by (reason)
+          /
+          sum(rate(policy_eval_total[5m])) by (reason)
+          > 0.1
+        for: 5m
+        labels:
+          severity: warning
+          component: policy
+        annotations:
+          summary: "Policy deny rate > 10%"
+          description: "Reason {{ $labels.reason }} deny rate = {{ $value | humanizePercentage }}"
+
+      - alert: JWKSRefreshFailure
+        expr: |
+          increase(jwks_refresh_failure_total[5m]) >= 3
+        for: 1m
+        labels:
+          severity: critical
+          component: policy
+        annotations:
+          summary: "JWKS refresh failed >= 3 times (5m)"
+          description: "JWKS refresh failures = {{ $value }}"

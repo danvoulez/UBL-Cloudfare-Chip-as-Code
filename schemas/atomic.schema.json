@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ubl.agency/schemas/atomic.schema.json",
+  "title": "JSON✯Atomic Base Envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "ts",
+    "kind",
+    "scope",
+    "actor",
+    "refs",
+    "data",
+    "meta",
+    "sig"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[0-9A-HJKMNP-TV-Z]{26}$|^[0-9a-fA-F-]{36}$"
+    },
+    "ts": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{3})?Z$"
+    },
+    "kind": {
+      "type": "string",
+      "minLength": 1
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tenant": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "entity": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 64
+        },
+        "room": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 64
+        },
+        "container": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 64
+        }
+      },
+      "required": [
+        "tenant"
+      ]
+    },
+    "actor": {
+      "type": "string",
+      "minLength": 1
+    },
+    "refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 64
+      },
+      "maxItems": 100
+    },
+    "data": {
+      "type": "object"
+    },
+    "meta": {
+      "type": "object"
+    },
+    "sig": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "alg",
+            "kid",
+            "value"
+          ],
+          "properties": {
+            "alg": {
+              "const": "Ed25519"
+            },
+            "kid": {
+              "type": "string",
+              "minLength": 4,
+              "maxLength": 128
+            },
+            "value": {
+              "type": "string",
+              "contentEncoding": "base64"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Stream Session v1",
+  "type": "object",
+  "required": ["id", "ts", "kind", "scope", "actor"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Session ID (UUID)"
+    },
+    "ts": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp"
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "stream.prepared",
+        "stream.live",
+        "stream.ended",
+        "stream.recording.start",
+        "stream.recording.stop",
+        "replay.ready"
+      ],
+      "description": "Event kind"
+    },
+    "scope": {
+      "type": "object",
+      "required": ["tenant"],
+      "properties": {
+        "tenant": { "type": "string" },
+        "room": { "type": "string" },
+        "entity": { "type": "string" }
+      }
+    },
+    "actor": {
+      "type": "object",
+      "required": ["email"],
+      "properties": {
+        "email": { "type": "string" },
+        "groups": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "refs": {
+      "type": "object",
+      "description": "References (session_id, replay_media_id, thumb_media_id, etc.)"
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": ["party", "duo", "circle", "roulette", "stage"]
+        },
+        "audience": { "type": "string" },
+        "title": { "type": "string" },
+        "state": {
+          "type": "string",
+          "enum": ["prepared", "publishing", "live", "ending", "archived"]
+        },
+        "live": { "type": "boolean" },
+        "recording": { "type": "boolean" },
+        "playback_type": {
+          "type": "string",
+          "enum": ["webrtc", "ll-hls"]
+        },
+        "playback_url": { "type": "string" },
+        "sfu_url": { "type": "string" },
+        "ingest_url": { "type": "string" }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "properties": {
+        "service": { "type": "string" }
+      }
+    },
+    "sig": {
+      "type": ["string", "null"],
+      "description": "Ed25519 signature (optional)"
+    }
+  }
+}

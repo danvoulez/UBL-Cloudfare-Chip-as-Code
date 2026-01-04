@@ -1,0 +1,43 @@
+# App Manifest — Chip-as-Code
+# Blueprint 16 — Constituição & Anexos
+# Substitua <APP_ID> pelo ID do seu app (ex: omni.party, messenger.v1)
+
+version: 1
+app:
+  id: "<APP_ID>"           # ex: omni.party
+  name: "Display Name"     # Nome de exibição do app
+  tenant: "ubl"            # Escopo lógico
+  mode: "commitment"       # commitment|deliberation
+  session_types: ["work","assist"]  # Tipos de sessão suportados
+
+contracts:
+  mcp:
+    entrypoint: "/mcp"     # Via Gateway
+    client_id: "app:<APP_ID>"
+    tools:
+      - "ubl@v1.append_link"
+      - "messenger@v1.send"
+      - "media@v1.presign"
+  webhooks:
+    verify: "required"     # Exige W_Webhook_Trusted
+    sources: ["stripe","custom"]
+
+limits:
+  rate:
+    calls_per_min: 60
+    burst: 120
+  idempotency_ttl_sec: 600
+
+artifacts:
+  schemas:
+    - "schemas/request.schema.json"
+    - "schemas/response.schema.json"
+
+publish:
+  stage: "next"            # next|prod
+  policy_pack_key: "policy_pack_next"
+  policy_yaml_key: "policy_yaml_next"
+
+notes: |
+  Preencha <APP_ID> e o display name. Sem PII em logs.
+  Este manifest segue a Constituição (Blueprint 16) e Chip-as-Code.

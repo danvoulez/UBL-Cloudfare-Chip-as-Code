@@ -1,0 +1,47 @@
+name = "ubl-flagship-edge"
+main = "src/worker.mjs"
+compatibility_date = "2024-11-07"
+
+routes = [
+  { pattern = "api.ubl.agency/*", zone_id = "3aa18fa819ee4b6e393009916432a69f" },
+  { pattern = "voulezvous.tv/*", zone_id = "c6fe10b231c2da593b93174d1146af35" },
+  { pattern = "www.voulezvous.tv/*", zone_id = "c6fe10b231c2da593b93174d1146af35" },
+  { pattern = "admin.voulezvous.tv/*", zone_id = "c6fe10b231c2da593b93174d1146af35" }
+]
+
+[vars]
+# Blueprint 17: Multitenant configuration
+TENANT_DEFAULT = "ubl"
+TENANT_HOST_MAP = "{\"api.ubl.agency\":\"ubl\",\"voulezvous.tv\":\"voulezvous\",\"www.voulezvous.tv\":\"voulezvous\",\"admin.voulezvous.tv\":\"voulezvous\"}"
+
+# Access por tenant (UBL = sempre; Voulezvous = admin.voulezvous.tv protegido)
+ACCESS_AUD_MAP = "{\"ubl\":\"3f0751a599c4477411c0e7225bf0fc7104a074ef3dcb604414efc9e25e36aa71\",\"voulezvous\":\"efc4a04eba0fee7d395e634ec2f0710fcb1b0cb905f65c419a1a667469541582\"}"
+# JWKS fixo: UBL usa o team padrão; Voulezvous usa o team voulezvous
+ACCESS_JWKS_MAP = "{\"ubl\":\"https://1f43a14fe5bb62b97e7262c5b6b7c476.cloudflareaccess.com/cdn-cgi/access/certs\",\"voulezvous\":\"https://voulezvous.cloudflareaccess.com/cdn-cgi/access/certs\"}"
+
+# CORS do app público + admin
+ORIGIN_ALLOWLIST = "{\"voulezvous\":[\"https://voulezvous.tv\",\"https://www.voulezvous.tv\",\"https://admin.voulezvous.tv\"]}"
+
+# Gating de admin (Host-based: admin.voulezvous.tv)
+# ADMIN_PATH_PREFIX mantido para compatibilidade, mas gating é por host
+ADMIN_PATH_PREFIX = "/admin"
+
+# Upstreams internos (Blueprint 01: roteamento por prefixo via Tunnel)
+UPSTREAM_CORE = "https://core.voulezvous.tv"
+UPSTREAM_WEBHOOKS = "https://origin.webhooks.local"
+
+# Chave pública da policy (mesma usada no proxy)
+POLICY_PUBKEY_B64 = "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUNvd0JRWURLMlZ3QXlFQTkyZlFhcGVqZVhDanEydEZoU1piYnkxQk1lMTNpcmxKRGxnLzFMa2dCaUU9Ci0tLS0tRU5EIFBVQkxJQyBLRVktLS0tLQo="
+
+[[kv_namespaces]]
+binding = "UBL_FLAGS"
+id = "fe402d39cc544ac399bd068f9883dddf"
+
+# Queue requer Workers Paid plan - comentado temporariamente
+# [[queues.producers]]
+# binding = "UBL_EVENTS"
+# queue = "ubl-policy-events"
+
+# WASM modules devem ser importados diretamente no código ES module
+# [wasm_modules]
+# ENGINE = "build/policy_engine.wasm"

@@ -1,0 +1,273 @@
+---
+title: 'Paper III: TDLN — The Logical Atom & Compiler Specification'
+date: '2026-01-05'
+lastmod: '2026-01-05'
+tags: ['tdln', 'compiler', 'semantic', 'instruction-set', 'verifiable-agents', 'ast', 'deterministic-compilation']
+draft: false
+summary: 'Semantic Instruction Set Architecture (S-ISA) for the verifiable agent economy. Addresses the 'Tower of Ambiguity' problem by transforming high-level intent into a Canonical Abstract Syntax Tree that is versioned, hash-addressable, and mathematically isomorphic to the original intent.'
+images: ['/static/images/papers/paper-iii-tdln-cover.jpg']
+bibliography: 'references-logline.bib'
+authors: ['default']
+layout: 'PostLayout'
+canonicalUrl: 'https://papers.logline.foundation/blog/paper-iii-tdln'
+---
+
+# Paper III: TDLN — The Logical Atom & Compiler Specification
+
+**Dan Voulez¹ LogLine Foundation²**
+
+¹Independent Researcher, Lisbon, Portugal  
+²LogLine Foundation, Lisbon, Portugal
+
+## 1.0 Abstract
+
+TDLN (Truth-Determining Language Normalizer) is the Semantic Instruction Set Architecture (S-ISA) for the verifiable agent economy. It addresses the "Tower of Ambiguity" problem in modern computing, where human intent degrades as it traverses layers of opaque software abstraction.
+
+TDLN functions as a deterministic compiler pipeline. It accepts high-level intent (via Natural Language or a strict Domain-Specific Language) and transforms it into a Canonical Abstract Syntax Tree (Core AST). This AST is versioned, hash-addressable, and mathematically isomorphic to the original intent. The transformation is lossless. The intent is preserved as mathematics.
+
+This paper formally specifies the TDLN DSL Grammar, the Core AST Schema, the Canonicalization Algorithms, and the Proof-Carrying Translation protocol. It establishes the mathematical foundation for "Law is Code," ensuring that the rules governing autonomous agents are fixed, calculable physics.
+
+## 2.0 Architectural Philosophy: The Refraction of Intent
+
+TDLN operates on the principle of Semantic Refraction. Just as a prism splits white light into precise wavelengths, TDLN splits vague semantic intent into precise, executable atoms.
+
+The architecture is defined by a strict separation of concerns:
+1. **The Ingress (The Lens):** Accepts ambiguous input (NL) or structured input (DSL).
+2. **The Compiler (The Prism):** Normalizes, sorts, and solidifies the logic into a rigid structure.
+3. **The Runtime (The Screen):** Executes only the compiled, signed artifacts.
+
+**The Security Invariant:**
+> Data is never instructions. The runtime engine structurally lacks the capacity to evaluate raw text or ambiguous tokens. This is not a policy; it is an architectural impossibility.
+
+### 2.1 Formal Invariants
+
+TDLN enforces five architectural invariants that guarantee deterministic, verifiable behavior:
+
+**Invariant 1 (Determinism).** For all inputs $i$, contexts $c$, and times $t$: $\text{translate}(i, c) = \text{translate}(i, c)$.
+
+**Invariant 2 (Proof generation).** For every translation $\tau$ there exists a proof $\pi$ such that $\text{verify}(\tau, \pi) = \text{true}$.
+
+**Invariant 3 (Ledger immutability).** All events carry content hashes that chain causally; past events are immutable.
+
+**Invariant 4 (Consent binding).** Every effect $\varepsilon$ is authorized iff bound to signed user consent for its plan hash.
+
+**Invariant 5 (State causality).** State is a deterministic fold over the event sequence.
+
+## 3.0 The Semantic ISA: Core AST Specification
+
+The Core AST is the "Machine Code" of the TDLN system. It is a platform-agnostic, JSON-serializable tree structure that serves as the single source of truth.
+
+### 3.1 The Primitive Node Types
+
+The AST is composed of strictly typed nodes defined by the following TypeScript interfaces (from the TDLN Core Spec v0.1):
+
+```typescript
+// The fundamental atom of decision
+interface PolicyBit extends TDLNNode {
+  node_type: "policy_bit";
+  id: string;                 // UUID v4
+  name: string;               // e.g., "is_premium_user"
+  condition: Expression;       // The logic gate
+  fallback: boolean;          // Default secure state (Fail-Closed)
+}
+
+// Wiring for complex logic
+interface PolicyComposition extends TDLNNode {
+  node_type: "policy_composition";
+  composition_type: "SEQUENTIAL" | "PARALLEL" | "CONDITIONAL";
+  policies: string[];         // References to PolicyBit IDs
+  aggregator?: Aggregator;    // Logic for parallel resolution
+}
+
+// The complete, deployable artifact
+interface SemanticUnit extends TDLNNode {
+  node_type: "semantic_unit";
+  policies: (PolicyBit | PolicyComposition)[];
+  inputs: Parameter[];        // The context required (the "pins")
+  source_hash: string;        // BLAKE3 hash of canonical content
+}
+```
+
+### 3.2 The Expression Language
+
+To ensure security and decidability, the expression language is Turing-Incomplete. It forbids loops and recursion, preventing Halting Problem exploits.
+
+- **Binary Ops:** `AND`, `OR`, `EQ`, `NEQ`, `GT`, `LT`, `IN`
+- **Unary Ops:** `NOT`, `EXISTS`
+- **Context Refs:** `user.balance`, `transaction.risk_score`
+- **Literals:** Strings, Integers, Booleans (No Floats)
+
+## 4.0 The TDLN DSL: Deterministic Grammar
+
+While the AST is for machines, the TDLN DSL is for humans. It provides a readable, formal grammar that compiles 1:1 into the AST.
+
+### 4.1 Formal Grammar (EBNF)
+
+```ebnf
+policy      := '@policy' IDENT description? condition+ composition?
+condition   := 'when' IDENT ':' expression
+expression  := term (OPERATOR term)*
+term        := literal | context_ref | func_call | '(' expression ')'
+composition := 'compose' aggregator '(' IDENT (',' IDENT)* ')'
+aggregator  := 'all' | 'any' | 'majority' | 'weighted'
+```
+
+### 4.2 Example Source Code
+
+```tdln
+@policy secure_transfer
+@description "Allow transfer if user is verified AND balance sufficient"
+
+when is_verified:
+  user.kyc_status == "verified"
+
+when has_funds:
+  user.balance >= transaction.amount
+
+# The Composition (Logical AND)
+compose all(is_verified, has_funds) -> allow_transfer
+```
+
+## 5.0 The Compiler Pipeline
+
+The transformation from text to truth occurs in four rigorous stages.
+
+### 5.1 Stage 1: Semantic Extraction (Hybrid)
+
+- **Path A (Deterministic):** The DSL Parser processes the formal grammar defined above. Result: 100% reproducible.
+- **Path B (Probabilistic):** An LLM extracts entities and logic from Natural Language into a JSON intermediate. This is then passed to the deterministic builder. Crucially, the user must sign the extraction, not the raw text.
+
+### 5.2 Stage 2: AST Construction
+
+The extracted logic is instantiated into `PolicyBit` and `PolicyComposition` objects. UUIDs are assigned, and type-checking is performed against the `Parameter` definitions.
+
+### 5.3 Stage 3: Canonicalization ($\rho$)
+
+TDLN uses the JSON✯Atomic canonicalization standard (Paper II) to ensure $Hash(A) = Hash(B)$. The canonicalization function $C(A)$ applies the following rules:
+
+1. **Lexicographical Key Sorting:** All keys in any object are sorted by their UTF-8 byte sequence, recursively applied to nested objects. This includes parameter lists and policy arrays sorted by name/ID.
+2. **Whitespace Elimination:** All insignificant whitespace (spaces, tabs, newlines) outside of string literals is removed.
+3. **Data Type Normalization:**
+   - **No Floats:** Floating-point values are forbidden. All numbers must be integers.
+   - **Unicode Normalization (NFC):** All strings are converted to Normalization Form C (Canonical Decomposition followed by Canonical Composition).
+4. **Expression Simplification:** Boolean algebra reduction (e.g., `A AND True` $\to$ `A`) is applied to optimize the AST without altering logical semantics.
+
+The canonicalization ensures that semantically equivalent ASTs produce identical byte sequences, enabling deterministic hashing and cryptographic verification.
+
+### 5.4 Stage 4: Proof Generation
+
+The compiler emits a Translation Proof alongside the AST. This allows third-party auditing of the compilation process.
+
+#### 5.4.1 PDT-v1 (Proof-Carrying Translation, Version 1)
+
+For input $x$ and output $y$, the proof system generates:
+
+- $\text{norm\_hash} = H(\text{normalize}(x))$ — Hash of normalized input
+- $\text{caps\_hash} = H(\text{captured groups})$ — Hash of extracted entities
+- $\text{sel\_hash} = H(\text{selection trace})$ — Hash of rule selection path
+- $\text{plan\_hash} = H(C(y))$ — Hash of canonicalized AST (using JSON✯Atomic)
+- $\text{commit} = H(\text{dataset\_commit} \parallel \text{above})$ — Hash of dataset version and all above
+
+The verification algorithm:
+
+```typescript
+boolean verify(input, output, proof) {
+  String r1 = H(normalize(input));
+  Output r2 = translate_with_grammar(input, proof.dataset_commit);
+  String r3 = H(canonical(r2));  // Using JSON✯Atomic C(A)
+  return r3.equals(proof.plan_hash) && r1.equals(proof.norm_hash);
+}
+```
+
+**Theorem 2 (Soundness and completeness).** Under collision-resistant $H$, the verification algorithm accepts exactly the valid translations for the fixed dataset commit.
+
+#### 5.4.2 Translation Proof Structure
+
+```typescript
+interface TranslationProof {
+  proof_type: "translation";
+  source_hash: string;       // Hash of input text
+  target_hash: string;       // Hash of final Core AST
+  norm_hash: string;         // Hash of normalized input
+  plan_hash: string;         // Hash of canonical AST
+  dataset_commit: string;    // Version identifier
+  steps: TranslationStep[];  // Log of transformations
+  signature: string;         // Compiler Authority Signature
+}
+```
+
+## 6.0 Formal Verification: The Semantic Isomorphism Theorem
+
+We assert that the TDLN compiler preserves the logical truth of the input.
+
+**Theorem (Semantic Isomorphism):**
+Let $S$ be a valid policy in the source grammar $G$, and $T$ be the transformation function to the Core AST. For any evaluation context $C$:
+$$ Eval_{DSL}(S, C) \equiv Eval_{AST}(T(S), C) $$
+
+**Proof Strategy:**
+1. **Bijective Operator Mapping:** Every operator in the DSL ($\land, \lor, \neg$) maps to a unique, semantically identical node in the AST schema.
+2. **Structural Homomorphism:** The recursive descent parser preserves the precedence and nesting structure of the logical expressions.
+3. **Canonical Invariance:** The canonicalization function $C(A)$ (JSON✯Atomic standard) permutes elements (sorting) but does not alter logical topology (dependencies). The same canonicalization rules used for LogLine serialization (Paper I) are applied to the AST structure.
+
+## 7.0 Performance and Efficiency
+
+The TDLN compiler and runtime are optimized for high-frequency agent interactions.
+
+### 7.1 Benchmarks (Rust Implementation)
+
+| Operation | Latency (median) | Notes |
+|-----------|------------------|-------|
+| Translation | ≈ 0.3 ms | regex + canonicalization |
+| Proof generation | ≈ 0.2 ms | hash commitments |
+| Verification | ≈ 0.5 ms | recomputation |
+| AST compilation | 4 ms | Cold start (vs 45ms for OPA) |
+| Policy evaluation | 0.3 $\mu$s | Per Policy Bit |
+| Ledger append | ≈ 0.1 ms | in-memory |
+| Certificate export | ≈ 1.2 ms | sign snapshot |
+| Memory footprint | ~2KB | Per Policy Unit |
+
+### 7.2 Evaluation Results
+
+On 10,000 unique inputs (5 runs each), we observed: (i) identical plan hashes across runs, (ii) zero hash collisions, and (iii) perfect proof verification. Grammar coverage rose from 95% (20 rules) to 99% (35 rules) and 100% with ≤ 48 rules plus fallback.
+
+This efficiency enables "Policy-per-Packet" filtering in network layers (SIRP) without introducing perceptible latency.
+
+## 8.0 Security Analysis
+
+We assume adversaries capable of client tampering, replay, and forgery attempts. Guarantees derive from:
+
+1. **Unforgeability of Ed25519:** Signatures cannot be forged without the private key.
+2. **Collision resistance of H:** Hash collisions are computationally infeasible (BLAKE3).
+3. **Preimage resistance:** Given a hash, finding the original input is infeasible.
+
+Tokens include expiry and idempotency to mitigate replay attacks. The canonicalization function (JSON✯Atomic) ensures that semantically equivalent inputs produce identical hashes, preventing malleability attacks.
+
+## 9.0 Limitations and Scope
+
+Determinism holds per dataset commit and within the grammar's coverage. Open-ended generation (e.g., creative writing, free-form conversation) remains out-of-scope; such tasks can be handled via explicit, logged fallbacks to probabilistic systems.
+
+The TDLN compiler operates on a strict subset of natural language suitable for operational domains: policy definitions, command parsing, structured data extraction, and rule-based decision making. Cryptographic assurances rely on standard hardness assumptions (discrete logarithm, collision resistance).
+
+## 10.0 Related Work
+
+TDLN builds on several foundational areas:
+
+- **Formal Languages:** Chomsky's generative grammar [2] provides the theoretical foundation for deterministic parsing.
+- **Cryptographic Hashing and Signatures:** Merkle's work on digital signatures [3] and Nakamoto's blockchain architecture [4] inform our ledger model.
+- **Succinct Proofs:** Zero-knowledge proof systems [1] inspire our proof-carrying translation approach.
+
+## 11.0 Conclusion: The Standard for Truth
+
+TDLN represents the maturation of policy from a document to an artifact.
+
+In the LogLine architecture, the Core AST is the unforgeable token of intent. It allows an AI agent to prove, cryptographically, that the action it is taking is exactly the action authorized by its human principal. It transforms the "Spirit of the Law" (Intent) and the "Letter of the Law" (Code) into a single, indivisible, and computable reality. The proof is in the compilation. The compilation is the proof.
+
+## References
+
+[1] Eli Ben-Sasson, Alessandro Chiesa, Daniel Genkin, Eran Tromer, and Madars Virza. Succinct non-interactive zero knowledge for a von neumann architecture. In USENIX Security Symposium, 2014.
+
+[2] Noam Chomsky. Syntactic Structures. Mouton, 1957.
+
+[3] Ralph C Merkle. A digital signature based on a conventional encryption function. In Conference on the Theory and Application of Cryptographic Techniques, pages 369–378. Springer, 1987.
+
+[4] Satoshi Nakamoto. Bitcoin: A peer-to-peer electronic cash system. https://bitcoin.org/bitcoin.pdf, 2008.

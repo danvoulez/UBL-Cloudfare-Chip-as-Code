@@ -1,0 +1,7 @@
+{
+  "name": "canonical-only",
+  "description": "Restrict workspace to canonical-marked files only",
+  "rules": {
+    "canonical": true
+  }
+}

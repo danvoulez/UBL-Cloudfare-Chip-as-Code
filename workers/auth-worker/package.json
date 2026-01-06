@@ -1,0 +1,19 @@
+{
+  "name": "ubl-id-worker",
+  "version": "1.0.0",
+  "description": "UBL ID — Identity Provider (WebAuthn + Tokens)",
+  "main": "src/worker.ts",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "dependencies": {
+    "@simplewebauthn/server": "^8.2.0",
+    "@simplewebauthn/typescript-types": "^8.2.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241106.0",
+    "typescript": "^5.3.0",
+    "wrangler": "^3.0.0"
+  }
+}

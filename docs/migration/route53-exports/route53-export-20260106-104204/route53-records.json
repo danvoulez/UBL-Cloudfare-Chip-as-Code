@@ -1,0 +1,150 @@
+{
+    "ResourceRecordSets": [
+        {
+            "Name": "logline.world.",
+            "Type": "NS",
+            "TTL": 172800,
+            "ResourceRecords": [
+                {
+                    "Value": "ns-59.awsdns-07.com."
+                },
+                {
+                    "Value": "ns-1479.awsdns-56.org."
+                },
+                {
+                    "Value": "ns-908.awsdns-49.net."
+                },
+                {
+                    "Value": "ns-1893.awsdns-44.co.uk."
+                }
+            ]
+        },
+        {
+            "Name": "logline.world.",
+            "Type": "SOA",
+            "TTL": 900,
+            "ResourceRecords": [
+                {
+                    "Value": "ns-59.awsdns-07.com. awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400"
+                }
+            ]
+        },
+        {
+            "Name": "_12898ab36bb8ab1ffa4271254d775726.logline.world.",
+            "Type": "CNAME",
+            "TTL": 60,
+            "ResourceRecords": [
+                {
+                    "Value": "_b53c4e0ac9690dd2a1538bcf762a3125.jkddzztszm.acm-validations.aws."
+                }
+            ]
+        },
+        {
+            "Name": "_amazonses.logline.world.",
+            "Type": "TXT",
+            "TTL": 1800,
+            "ResourceRecords": [
+                {
+                    "Value": "\"7pe9EJUYg+GakmSJWkYbpNeBf+Mi86FXRfnFeNdpinY=\""
+                }
+            ]
+        },
+        {
+            "Name": "api.logline.world.",
+            "Type": "A",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "52.4.126.139"
+                }
+            ]
+        },
+        {
+            "Name": "dashboard.logline.world.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "d1n2b2uqqd0puw.cloudfront.net"
+                }
+            ]
+        },
+        {
+            "Name": "id.logline.world.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "logline-id.vercel.app"
+                }
+            ]
+        },
+        {
+            "Name": "lab512.logline.world.",
+            "Type": "A",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "18.207.58.99"
+                }
+            ]
+        },
+        {
+            "Name": "minicontratos.logline.world.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "minicontratos-platform.vercel.app"
+                }
+            ]
+        },
+        {
+            "Name": "_c588c23179c839474cc1802afb4d795f.minicontratos.logline.world.",
+            "Type": "CNAME",
+            "TTL": 500,
+            "ResourceRecords": [
+                {
+                    "Value": "_730015b9452cf14fe6e77b3f5a905c6a.jkddzztszm.acm-validations.aws."
+                }
+            ]
+        },
+        {
+            "Name": "_5fddaa4dee7d116250b8abaa8c5a1043.studio.logline.world.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "_ca514b99528e416931d76aed1d19385d.jkddzztszm.acm-validations.aws."
+                }
+            ]
+        },
+        {
+            "Name": "transformer.logline.world.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z2FDTNDATAQYW2",
+                "DNSName": "d1xfsfovvkifkn.cloudfront.net.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "transformer.logline.world.",
+            "Type": "AAAA",
+            "AliasTarget": {
+                "HostedZoneId": "Z2FDTNDATAQYW2",
+                "DNSName": "d1xfsfovvkifkn.cloudfront.net.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "ws.logline.world.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z1UJRXOUMOOFQ8",
+                "DNSName": "d-ixz9ffsztf.execute-api.us-east-1.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        }
+    ]
+}

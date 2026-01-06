@@ -1,0 +1,41 @@
+name = "office-api-worker"
+main = "src/index.ts"
+compatibility_date = "2024-12-01"
+
+[[d1_databases]]
+binding = "OFFICE_DB"
+database_name = "OFFICE_DB"
+database_id = "a573af13-4c5b-473d-ab89-4538547eb53d"
+
+[[kv_namespaces]]
+binding = "OFFICE_FLAGS"
+id = "6054210608aa456ca8c02c8f418062f3"
+
+[[kv_namespaces]]
+binding = "OFFICE_CACHE"
+id = "db52285653f24bfaaf4d03dc477a2b30"
+
+# [[vectorize]]
+# binding = "OFFICE_VECTORS"
+# index_name = "office-vectors"
+
+[ai]
+binding = "AI"
+
+[[r2_buckets]]
+binding = "OFFICE_BLOB"
+bucket_name = "office-blobs"
+
+[durable_objects]
+bindings = [
+  { name = "OFFICE_SESSION", class_name = "OfficeSessionDO" }
+]
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["OfficeSessionDO"]
+
+[vars]
+TOPK_DEFAULT = "6"
+EVIDENCE_MODE_DEFAULT = "answer"
+ENVIRONMENT = "production"

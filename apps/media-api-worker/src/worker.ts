@@ -725,6 +725,104 @@ export default {
         });
       }
       
+      // Blueprint 10: Stage URL estável (@user)
+      // GET /stage/:username → resolve stage do usuário (offline/live/replay)
+      if (path.startsWith("/stage/") && request.method === "GET") {
+        const username = path.split("/")[2];
+        if (!username) {
+          return new Response(JSON.stringify({ error: "username_required" }), {
+            status: 400,
+            headers: { "Content-Type": "application/json" },
+          });
+        }
+        
+        // Lookup active stage session for user
+        const stageKey = `stage:${username}`;
+        const sessionId = await env.KV_MEDIA.get(stageKey);
+        
+        if (!sessionId) {
+          // No active stage → offline
+          return new Response(JSON.stringify({
+            state: "offline",
+            username,
+            live: false,
+            replay: null
+          }), {
+            headers: { "Content-Type": "application/json" },
+          });
+        }
+        
+        // Get session from D1
+        const session = await env.D1_MEDIA.prepare(
+          "SELECT * FROM stream_sessions WHERE id = ?"
+        ).bind(sessionId).first<{
+          id: string;
+          mode: string;
+          state: string;
+          live: number;
+          playback_url: string | null;
+          replay_media_id: string | null;
+        }>();
+        
+        if (!session) {
+          return new Response(JSON.stringify({
+            state: "offline",
+            username,
+            live: false,
+            replay: null
+          }), {
+            headers: { "Content-Type": "application/json" },
+          });
+        }
+        
+        // Determine state: live or replay
+        if (session.live === 1 && session.state === "live") {
+          // Live stage
+          return new Response(JSON.stringify({
+            state: "live",
+            username,
+            live: true,
+            session_id: session.id,
+            playback: {
+              type: session.mode === "stage" ? "ll-hls" : "webrtc",
+              url: session.playback_url || null
+            },
+            replay: null
+          }), {
+            headers: { "Content-Type": "application/json" },
+          });
+        } else if (session.replay_media_id) {
+          // Replay available
+          const replayLink = await env.R2_MEDIA.createMultipartUpload(
+            `${env.R2_MEDIA_PREFIX}/${tenant}/replay/${session.replay_media_id}`
+          );
+          
+          return new Response(JSON.stringify({
+            state: "replay",
+            username,
+            live: false,
+            session_id: session.id,
+            playback: null,
+            replay: {
+              media_id: session.replay_media_id,
+              url: replayLink ? `https://${env.R2_MEDIA_PREFIX}.r2.dev/${env.R2_MEDIA_PREFIX}/${tenant}/replay/${session.replay_media_id}` : null
+            }
+          }), {
+            headers: { "Content-Type": "application/json" },
+          });
+        } else {
+          // Offline
+          return new Response(JSON.stringify({
+            state: "offline",
+            username,
+            live: false,
+            replay: null
+          }), {
+            headers: { "Content-Type": "application/json" },
+          });
+        }
+      }
+      
       return new Response("Not Found", { status: 404 });
     } catch (e) {
       return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "internal_error" }), {

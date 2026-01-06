@@ -1,0 +1,2 @@
+voulezvous.ai.	NS	172800	ns-96.awsdns-12.com.
+voulezvous.ai.	SOA	900	ns-96.awsdns-12.com. awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400

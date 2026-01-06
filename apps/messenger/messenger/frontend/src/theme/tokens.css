@@ -1,0 +1,21 @@
+:root {
+  --brand: #ff6a2b;
+  --brand-contrast: #ffffff;
+  --brand-muted: #ffe8df;
+  --surface: #ffffff;
+  --surface-2: #fafafa;
+  --text: #111827;
+  --text-muted: #6b7280;
+}
+
+/* Role-driven theming. Toggle by setting data-role="admin" on <html>. */
+[data-role="admin"] {
+  --brand: #1479ff;
+  --brand-contrast: #ffffff;
+  --brand-muted: #e7f0ff;
+}
+
+/* Helper tokens used by simple components */
+.brand-bg { background-color: var(--brand); color: var(--brand-contrast); }
+.brand-border { border-color: var(--brand); }
+.brand-muted { background-color: var(--brand-muted); }

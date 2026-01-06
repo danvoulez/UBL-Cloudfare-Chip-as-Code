@@ -1,0 +1,14 @@
+logline.world.	NS	172800	ns-59.awsdns-07.com.
+logline.world.	SOA	900	ns-59.awsdns-07.com. awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400
+_12898ab36bb8ab1ffa4271254d775726.logline.world.	CNAME	60	_b53c4e0ac9690dd2a1538bcf762a3125.jkddzztszm.acm-validations.aws.
+_amazonses.logline.world.	TXT	1800	"7pe9EJUYg+GakmSJWkYbpNeBf+Mi86FXRfnFeNdpinY="
+api.logline.world.	A	300	52.4.126.139
+dashboard.logline.world.	CNAME	300	d1n2b2uqqd0puw.cloudfront.net
+id.logline.world.	CNAME	300	logline-id.vercel.app
+lab512.logline.world.	A	300	18.207.58.99
+minicontratos.logline.world.	CNAME	300	minicontratos-platform.vercel.app
+_c588c23179c839474cc1802afb4d795f.minicontratos.logline.world.	CNAME	500	_730015b9452cf14fe6e77b3f5a905c6a.jkddzztszm.acm-validations.aws.
+_5fddaa4dee7d116250b8abaa8c5a1043.studio.logline.world.	CNAME	300	_ca514b99528e416931d76aed1d19385d.jkddzztszm.acm-validations.aws.
+transformer.logline.world.	A	None	None
+transformer.logline.world.	AAAA	None	None
+ws.logline.world.	A	None	None

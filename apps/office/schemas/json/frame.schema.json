@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "File Context Frame",
+  "type": "object",
+  "properties": {
+    "entityId": {
+      "type": "string"
+    },
+    "tenant": {
+      "type": "string"
+    },
+    "inventory": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "topK": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "versionGraph": {
+      "type": "object"
+    },
+    "anchors": {
+      "type": "array",
+      "items": {
+        "$ref": "anchor.schema.json"
+      }
+    },
+    "limits": {
+      "type": "object",
+      "properties": {
+        "tokenBudget": {
+          "type": "integer"
+        },
+        "quotas": {
+          "type": "object"
+        }
+      }
+    }
+  },
+  "required": [
+    "entityId",
+    "tenant",
+    "inventory",
+    "topK",
+    "versionGraph",
+    "anchors"
+  ]
+}

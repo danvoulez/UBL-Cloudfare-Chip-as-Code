@@ -1,0 +1,8 @@
+{
+  "name": "UBL Messenger",
+  "description": "A high-fidelity messenger using the UBL Foundation design system.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}

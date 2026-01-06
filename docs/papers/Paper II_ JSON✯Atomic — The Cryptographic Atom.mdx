@@ -1,0 +1,195 @@
+---
+title: 'Paper II: JSON✯Atomic — The Cryptographic Atom'
+date: '2026-01-05'
+lastmod: '2026-01-05'
+tags: ['json-atomic', 'cryptography', 'canonicalization', 'signed-facts', 'deterministic-hashing', 'cryptographic-binding']
+draft: false
+summary: 'Open standard for creating 'Signed Facts'—units of data that are self-verifiable, immutable, and non-repudiable. Enforces a rigorous Canonicalization Pipeline ensuring Same Semantics = Same Bytes = Same Hash.'
+images: ['/static/images/papers/paper-ii-json-atomic-cover.jpg', '/static/images/papers/paper-ii-json-atomic-flow.jpg']
+bibliography: 'references-logline.bib'
+authors: ['default']
+layout: 'PostLayout'
+canonicalUrl: 'https://papers.logline.foundation/blog/paper-ii-json-atomic'
+---
+
+# Paper II: JSON✯Atomic — The Cryptographic Atom
+
+**Dan Voulez¹ LogLine Foundation²**
+
+¹Independent Researcher, Lisbon, Portugal  
+²LogLine Foundation, Lisbon, Portugal
+
+## 1.0 Abstract
+
+JSON✯Atomic is an open standard for creating "Signed Facts"—units of data that are self-verifiable, immutable, and non-repudiable. In the LogLine architecture, if the 9-field tuple is the foundation, then JSON✯Atomic provides the cryptographic binding that secures that foundation.
+
+Standard data formats like JSON, while human-readable, suffer from non-determinism; semantically identical data can be represented in multiple byte sequences. In cryptography, this ambiguity is catastrophic. JSON✯Atomic solves this by enforcing a rigorous Canonicalization Pipeline that strips away ambiguity, ensuring that Same Semantics = Same Bytes = Same Hash. Once canonicalized, data becomes a mathematical constant.
+
+This paper specifies the DV25-Seal (Data Verification Standard 2025), the canonicalization rules for numbers and Unicode, and the Trajectory Matching algorithms that allow these atomic facts to be aggregated into a computable identity.
+
+## 2.0 The Problem: The Serialization Crisis
+
+### 2.1 The Ambiguity of Standard JSON
+
+To build a system of "Mathematical Trust," we require that a hash of a data packet serves as its unique, immutable fingerprint. However, the JSON specification (RFC 8259) is permissive, creating a "Serialization Crisis" where verifiability breaks down.
+
+Consider two JSON objects representing the same transfer:
+```json
+// Object A
+{"to": "Alice", "amt": 100}
+
+// Object B
+{"amt": 100, "to": "Alice"}
+```
+To a human or a parser, $A = B$.
+To a cryptographic hash function, $Hash(A) \neq Hash(B)$.
+
+### 2.2 The Malleability Attack Vector
+
+This discrepancy opens the door to Malleability Attacks. An adversary can intercept a signed payload, reorder the keys, add insignificant whitespace, or change a number from `100` to `1e2`. The semantic meaning remains unchanged, enabling the payload to bypass logic checks, but the cryptographic signature is invalidated—or worse, a hash-based ID changes, breaking the audit trail.
+
+Without a canonical standard, data integrity relies on the parser's interpretation, which varies across languages (Rust, Python, JS). We replace this reliance with a mathematical constant.
+
+## 3.0 Specification: The JSON✯Atomic Standard
+
+JSON✯Atomic defines a strict subset of JSON that guarantees deterministic output. Any data entering the UBL ecosystem must pass through the `C(A)` Canonicalization Function.
+
+### 3.1 Rule Set 1: Structural Determinism
+
+1. **Lexicographical Key Sorting:** Keys in any object must be sorted by their UTF-8 byte sequence. This applies recursively to all nested objects.
+   - *Input:* `{"z": 1, "a": 2}`
+   - *Output:* `{"a": 2, "z": 1}`
+2. **Whitespace Elimination:** All insignificant whitespace (spaces, tabs, newlines) outside of string literals is removed. Separators are strictly `:` and `,`.
+3. **Null vs. Undefined:**
+   - `null` is preserved as a distinct value.
+   - `undefined` fields are strictly stripped from the object.
+
+### 3.2 Rule Set 2: Data Type Normalization
+
+To ensure consistency across heterogeneous systems (e.g., a 64-bit Rust backend vs. a JavaScript frontend), strict typing rules apply:
+
+1. **Numeric Precision:**
+   - **No Floats:** Floating-point non-determinism (IEEE 754) is forbidden.
+   - **Integer Representation:** All numbers must be integers. Decimals must be handled via fixed-point logic (e.g., currency in cents).
+   - **Format:** No trailing zeros (`1.0` $\to$ `1`), no scientific notation unless it reduces character count without loss of precision.
+   - *Input:* `{"x": 1.00}` $\to$ *Output:* `{"x": 1}`
+
+2. **Unicode Normalization (NFC):**
+   - Visual equivalence in Unicode does not mean byte equivalence (e.g., "é" can be `U+00E9` or `U+0065` + `U+0301`).
+   - **Rule:** All strings must be converted to Normalization Form C (NFC) (Canonical Decomposition followed by Canonical Composition) before serialization.
+
+### 3.3 Reference Test Vectors
+
+Implementations of JSON✯Atomic must pass the following vectors to be considered compliant:
+
+| Input | Canonical Output | BLAKE3 Hash (hex) |
+| :--- | :--- | :--- |
+| `{"b": 2, "a": 1}` | `{"a": 1, "b": 2}` | `a7f3bc91d4e2...` |
+| `{"val": 10.00}` | `{"val": 10}` | `4c91a03e582b...` |
+| `{"txt": "café"}` | `{"txt": "caf\u00e9"}` (NFC) | `8f1e3c5a7b9d...` |
+| `{"n": null, "u": undefined}` | `{"n": null}` | `c2d4e6f8a1b3...` |
+
+## 4.0 The Cycle of Truth: From Data to Signed Fact
+
+The creation of a "Signed Fact" (Atom) is a three-phase cryptographic lifecycle.
+
+### Phase 1: Canonization ($C(A)$)
+
+The raw LogLine tuple ($A$) is processed by the canonicalization engine.
+$$C(A) \rightarrow \text{Bytes}_{canonical}$$
+*Result:* A byte sequence where semantic intent is inextricably bound to representation.
+
+### Phase 2: Content Addressing ($H(C)$)
+
+The canonical bytes are hashed using BLAKE3.
+$$H(C(A)) \rightarrow \text{CID (Content ID)}$$
+*Why BLAKE3?*
+- **Performance:** It is significantly faster than SHA-256, enabling high-throughput processing for agent swarms.
+- **Merkle Tree Structure:** BLAKE3 is natively a Merkle tree, allowing for parallel hashing of large datasets and future proofs of inclusion without hashing the entire chain.
+
+### Phase 3: The DV25-Seal ($S(H)$)
+
+The CID is signed using Ed25519.
+$$S(H(C(A))) \rightarrow \sigma \text{ (Signature)}$$
+*Why Ed25519?*
+- **Security:** High resistance to side-channel attacks.
+- **Speed:** Extremely fast verification times, crucial for nodes validating thousands of agent actions per second.
+
+**The Final Artifact:**
+The JSON✯Atomic Atom is the tuple $(A_{canonical}, \text{CID}, \sigma, \text{PubKey})$. This artifact is self-sufficient; it requires no external database to verify its integrity. The data carries its own proof. The proof is the data.
+
+## 5.0 Trajectory Matching: The Algorithms of Identity
+
+While the Atom verifies a single moment, Identity is the aggregation of these atoms over time. We define Trust as a computable function of this history. This section details the Trajectory Matching algorithm used to verify an agent's reputation.
+
+### 5.1 The Mathematical Model
+
+Identity is defined as a vector space of completed LogLines (Atoms).
+$$Identity(Ag) = \vec{T} = [Atom_1, Atom_2, ..., Atom_n]$$
+
+When an agent requests an action, the system performs a Similarity Search against its history to determine if the action is consistent with its established behavior.
+
+### 5.2 Retrieval Guarantees
+
+Given a query vector $v_q$ (the proposed action) and a dataset of historical "Diamond Spans" (verified successful outcomes) $D$, we use Hierarchical Navigable Small World (HNSW) graphs for retrieval.
+
+The probability that a relevant historical precedent is found is bounded by:
+$$P(\text{relevant\_span} \in \text{TopK}(v_q, D)) \geq 1 - \varepsilon$$
+Where $\varepsilon$ is determined by the HNSW construction parameters ($M=16, ef=200$). In production, $\varepsilon < 0.01$, ensuring a 99% retrieval rate for relevant precedents.
+
+### 5.3 Confidence Calibration
+
+The system calculates a Confidence Score ($Conf$) to decide if an agent should be trusted automatically:
+$$Conf(P) = \mu(sim) \times (1 - \frac{\sigma^2(outcomes)}{max\_variance})$$
+Where:
+- $\mu(sim)$: The mean cosine similarity of the Top-K historical actions.
+- $\sigma^2(outcomes)$: The variance in the outcomes of those actions (did they succeed or fail?).
+
+**Decision Logic:**
+- $Conf > 0.8$: Auto-Approve. The agent has done this successfully many times before.
+- $0.5 < Conf < 0.8$: Challenge. Require 2FA or Guardian signature.
+- $Conf < 0.5$: Reject. This is anomalous behavior for this agent.
+
+### 5.4 The Evidence Chain
+
+Every Trajectory decision generates a verifiable evidence chain, which is itself stored as a JSON✯Atomic object:
+```json
+{
+  "decision": "approved",
+  "confidence": 0.87,
+  "evidence": [
+    {"cid": "blake3:a1...", "outcome": "success", "similarity": 0.94},
+    {"cid": "blake3:b2...", "outcome": "success", "similarity": 0.91}
+  ]
+}
+```
+This renders the AI's "reputation" auditably transparent.
+
+## 6.0 Persistence: The Immutable Ledger
+
+The integrity of individual atoms is preserved by the storage medium. We utilize NDJSON (Newline Delimited JSON) as the canonical persistence format.
+
+### 6.1 The Append-Only Constraint
+
+- **Format:** One JSON✯Atomic object per line.
+- **Immutability:** Files are write-once, read-many (WORM).
+- **Chain Guard:** Each line contains a `prev_hash` field referencing the BLAKE3 CID of the preceding line.
+  $$L_n.\text{prev\_hash} = \text{BLAKE3}(L_{n-1})$$
+
+This creates a lightweight blockchain structure without the overhead of distributed consensus. If a single byte in line 50 is altered, the hash check for line 51 (and all subsequent lines) will fail.
+
+## 7.0 System Invariants
+
+The JSON✯Atomic standard provides the following system-wide invariants:
+
+1. **Hash Stability:** A specific intent will always generate the exact same CID, regardless of the machine, time, or language used to generate it.
+2. **Tamper Evidence:** Any modification to the payload invalidates the signature. Any modification to the history invalidates the hash chain.
+3. **Non-Repudiation:** An agent cannot deny an action because the signature ($\sigma$) is mathematically bound to the canonical representation ($C(A)$) of that action.
+
+## 8.0 Conclusion: When Intention is an Atom
+
+JSON✯Atomic moves the security model from "Trust the Database" to "Trust the Data."
+
+By solving the serialization crisis, we transform data from a malleable format into a solid, verifiable Atom. The DV25-Seal ensures that intent can travel across hostile networks, through untrusted relays, and into execution environments without losing its integrity.
+
+In the UBL architecture, Trajectory is Identity. But without JSON✯Atomic, there is no Trajectory—only a collection of easily forged text files. This protocol provides the cryptographic foundation that makes history verifiable. When intention is an atom, trust becomes a theorem. The theorem is provable. The proof is in the bytes.

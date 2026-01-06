@@ -1,0 +1,22 @@
+{
+  "name": "office-mcp",
+  "version": "0.1.0",
+  "tools": [
+    {
+      "name": "office.frame.build",
+      "path": "tools/office.frame.build.json"
+    },
+    {
+      "name": "office.narrative.prepare",
+      "path": "tools/office.narrative.prepare.json"
+    },
+    {
+      "name": "office.evidence.get",
+      "path": "tools/office.evidence.get.json"
+    },
+    {
+      "name": "office.admin.reindex",
+      "path": "tools/office.admin.reindex.json"
+    }
+  ]
+}

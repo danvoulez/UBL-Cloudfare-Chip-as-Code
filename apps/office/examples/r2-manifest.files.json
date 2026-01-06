@@ -1,0 +1,10 @@
+{
+  "tenant": "voulezvous",
+  "files": [
+    {
+      "path": "spec/part1.md",
+      "kind": "spec",
+      "hash": "abc"
+    }
+  ]
+}

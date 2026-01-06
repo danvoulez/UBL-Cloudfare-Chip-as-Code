@@ -1,0 +1,2 @@
+voulezvous.tv.	NS	172800	ns-1005.awsdns-61.net.
+voulezvous.tv.	SOA	900	ns-1005.awsdns-61.net. awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400

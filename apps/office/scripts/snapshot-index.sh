@@ -1,0 +1,1 @@
+# Stub: snapshot current index

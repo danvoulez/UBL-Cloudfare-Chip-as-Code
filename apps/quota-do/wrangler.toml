@@ -1,0 +1,25 @@
+name = "quota-do"
+main = "src/worker.ts"
+compatibility_date = "2024-11-07"
+
+routes = [
+  { pattern = "api.ubl.agency/billing/*", zone_id = "3aa18fa819ee4b6e393009916432a69f" }
+]
+
+[[d1_databases]]
+binding = "BILLING_DB"
+database_name = "BILLING_DB"
+database_id = "7cae6a52-ee67-452f-b352-415be08282bf"
+
+[[kv_namespaces]]
+binding = "PLANS_KV"
+id = "d4f458d6adbd4a72b121bcd89be0582e"
+
+[durable_objects]
+bindings = [
+  { name = "QUOTA_DO", class_name = "QuotaDO" }
+]
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["QuotaDO"]

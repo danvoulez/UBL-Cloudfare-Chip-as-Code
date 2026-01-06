@@ -1,0 +1,16 @@
+{
+  "servers": [
+    {
+      "name": "Office Tools",
+      "description": "Office MCP server with evidence, frame, narrative, and admin tools.",
+      "transports": [{ "type": "streamable-http", "url": "https://office-api-worker.dan-1f4.workers.dev/mcp" }],
+      "tags": ["internal", "office", "voulezvous"]
+    },
+    {
+      "name": "Cloudflare Workers Bindings",
+      "description": "Managed MCP server by Cloudflare (bindings).",
+      "transports": [{ "type": "streamable-http", "url": "https://bindings.mcp.cloudflare.com/mcp" }],
+      "tags": ["cloudflare", "managed"]
+    }
+  ]
+}

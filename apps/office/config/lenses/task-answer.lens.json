@@ -1,0 +1,7 @@
+{
+  "name": "task-answer",
+  "description": "Minimal scope for answering a concrete task",
+  "rules": {
+    "topK": 5
+  }
+}

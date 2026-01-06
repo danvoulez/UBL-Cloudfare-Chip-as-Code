@@ -1,0 +1,14 @@
+name = "office-dreamer-worker"
+main = "src/index.ts"
+compatibility_date = "2024-12-01"
+
+[[d1_databases]]
+binding = "OFFICE_DB"
+database_name = "OFFICE_DB"
+database_id = "a573af13-4c5b-473d-ab89-4538547eb53d"
+
+[ai]
+binding = "AI"
+
+[triggers]
+crons = ["0 * * * *"]

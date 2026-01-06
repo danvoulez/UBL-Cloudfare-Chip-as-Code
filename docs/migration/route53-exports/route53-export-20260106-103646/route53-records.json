@@ -1,0 +1,33 @@
+{
+    "ResourceRecordSets": [
+        {
+            "Name": "voulezvous.tv.",
+            "Type": "NS",
+            "TTL": 172800,
+            "ResourceRecords": [
+                {
+                    "Value": "ns-1005.awsdns-61.net."
+                },
+                {
+                    "Value": "ns-168.awsdns-21.com."
+                },
+                {
+                    "Value": "ns-1192.awsdns-21.org."
+                },
+                {
+                    "Value": "ns-1812.awsdns-34.co.uk."
+                }
+            ]
+        },
+        {
+            "Name": "voulezvous.tv.",
+            "Type": "SOA",
+            "TTL": 900,
+            "ResourceRecords": [
+                {
+                    "Value": "ns-1005.awsdns-61.net. awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400"
+                }
+            ]
+        }
+    ]
+}

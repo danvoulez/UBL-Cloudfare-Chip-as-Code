@@ -1,0 +1,2 @@
+logline.foundation.	NS	172800	ns-2033.awsdns-62.co.uk.
+logline.foundation.	SOA	900	ns-2033.awsdns-62.co.uk. awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400

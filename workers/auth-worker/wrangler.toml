@@ -1,0 +1,43 @@
+name = "ubl-id"
+main = "src/worker.ts"
+compatibility_date = "2024-12-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Zone ID do ubl.agency
+zone_id = "3aa18fa819ee4b6e393009916432a69f"
+
+routes = [
+  { pattern = "id.ubl.agency/*", zone_id = "3aa18fa819ee4b6e393009916432a69f" }
+]
+
+# Secrets (preencher via wrangler secret put)
+# JWT_PRIVATE_JWK = "..." (opcional, se usar assinatura direta no worker)
+# JWT_PUBLIC_JWK = "..." (opcional, se expor JWKS direto no worker)
+
+# D1 e KV serão configurados quando necessário
+# Por enquanto, comentados para permitir deploy
+# [[d1_databases]]
+# binding = "UBL_DB"
+# database_name = "UBL_DB"
+# database_id = "YOUR_D1_DB_ID"
+
+# [[kv_namespaces]]
+# binding = "UBL_FLAGS"
+# id = "YOUR_KV_NAMESPACE_ID"
+
+# [[kv_namespaces]]
+# binding = "PASSKEY_CHALLENGE"
+# id = "YOUR_CHALLENGE_KV_ID"
+
+[vars]
+ISSUER_BASE = "https://id.ubl.agency"
+TOKEN_ISS = "https://id.ubl.agency"
+JWKS_URL = "https://id.ubl.agency/auth/jwks.json"
+COOKIE_DOMAIN = ".ubl.agency"
+RP_ID = "ubl.agency"
+SESSION_TTL_SECONDS = "43200"  # 12 horas
+CHALLENGE_TTL_SECONDS = "300"  # 5 minutos
+DEVICE_CODE_TTL_SECONDS = "600"  # 10 minutos
+
+# Secrets (preencher via wrangler secret put)
+# INTERNAL_AUTH_SECRET = "..." (wrangler secret put INTERNAL_AUTH_SECRET)

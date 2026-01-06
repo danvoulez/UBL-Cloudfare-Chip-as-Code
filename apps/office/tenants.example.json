@@ -1,0 +1,13 @@
+{
+  "default": "voulezvous",
+  "tenants": {
+    "voulezvous": {
+      "origins": [
+        "https://voulezvous.tv",
+        "https://www.voulezvous.tv",
+        "https://admin.voulezvous.tv"
+      ],
+      "jwks_url": "https://voulezvous.cloudflareaccess.com/cdn-cgi/access/certs"
+    }
+  }
+}

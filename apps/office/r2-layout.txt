@@ -1,0 +1,3 @@
+# Suggested R2 Layout
+# r2://office-r2/{tenant}/{kind}/{hash}/{filename}
+# e.g. r2://office-r2/voulezvous/spec/abc/part1.md

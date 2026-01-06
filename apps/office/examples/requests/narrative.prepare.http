@@ -1,0 +1,2 @@
+### Prepare narrative (stub route to be added in next drops)
+GET http://127.0.0.1:8787/narrative?tenant=voulezvous

@@ -1,0 +1,33 @@
+{
+    "ResourceRecordSets": [
+        {
+            "Name": "voulezvous.ai.",
+            "Type": "NS",
+            "TTL": 172800,
+            "ResourceRecords": [
+                {
+                    "Value": "ns-96.awsdns-12.com."
+                },
+                {
+                    "Value": "ns-2034.awsdns-62.co.uk."
+                },
+                {
+                    "Value": "ns-718.awsdns-25.net."
+                },
+                {
+                    "Value": "ns-1265.awsdns-30.org."
+                }
+            ]
+        },
+        {
+            "Name": "voulezvous.ai.",
+            "Type": "SOA",
+            "TTL": 900,
+            "ResourceRecords": [
+                {
+                    "Value": "ns-96.awsdns-12.com. awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400"
+                }
+            ]
+        }
+    ]
+}

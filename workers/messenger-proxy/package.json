@@ -1,0 +1,6 @@
+{
+  "name": "messenger-proxy",
+  "private": true,
+  "type": "module",
+  "devDependencies": {}
+}

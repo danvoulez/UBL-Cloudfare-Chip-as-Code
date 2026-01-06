@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ubl.agency/schemas/job.json",
+  "title": "Job",
+  "type": "object",
+  "required": [
+    "id",
+    "title",
+    "kind",
+    "createdAt",
+    "updatedAt",
+    "status"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "kind": {
+      "type": "string"
+    },
+    "createdAt": {
+      "type": "number"
+    },
+    "updatedAt": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "queued",
+        "running",
+        "paused",
+        "completed",
+        "failed",
+        "canceled"
+      ]
+    },
+    "progress": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "error": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "payload": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "meta": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,9 @@
+{
+  "tenant": "voulezvous",
+  "origins": [
+    "https://voulezvous.tv",
+    "https://www.voulezvous.tv",
+    "https://admin.voulezvous.tv"
+  ],
+  "canonicalLens": "canonical-only"
+}

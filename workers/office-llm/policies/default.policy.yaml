@@ -1,0 +1,24 @@
+version: 1
+logic:
+  default:
+    prefer: [openai, anthropic, lab_default]
+  adult:
+    prefer: [lab_adult, lab_default]
+
+providers:
+  openai:
+    kind: openai
+    url: https://api.openai.com/v1/chat/completions
+    model: gpt-4o-mini
+  anthropic:
+    kind: anthropic
+    url: https://api.anthropic.com/v1/messages
+    model: claude-3-5-sonnet-latest
+  lab_default:
+    kind: ollama
+    url: ${LAB_DEFAULT_BASE}
+    model: llama3:8b-instruct
+  lab_adult:
+    kind: ollama
+    url: ${LAB_ADULT_BASE}
+    model: llama3:8b-instruct

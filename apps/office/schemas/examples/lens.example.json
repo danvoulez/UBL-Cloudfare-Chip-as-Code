@@ -1,0 +1,6 @@
+{
+  "name": "canonical-only",
+  "rules": {
+    "canonical": true
+  }
+}

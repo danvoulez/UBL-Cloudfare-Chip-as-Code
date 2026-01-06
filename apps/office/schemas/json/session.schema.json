@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Session",
+  "type": "object",
+  "description": "LLM Session configuration (Part I)",
+  "properties": {
+    "entityId": {
+      "type": "string",
+      "description": "Entity identifier"
+    },
+    "workspaceId": {
+      "type": "string",
+      "description": "Workspace identifier"
+    },
+    "sessionType": {
+      "type": "string",
+      "enum": ["work", "assist", "deliberate", "research"],
+      "description": "Type of session"
+    },
+    "mode": {
+      "type": "string",
+      "enum": ["commitment", "deliberation"],
+      "description": "Session mode (binding vs draft)"
+    },
+    "tokenBudget": {
+      "type": "number",
+      "description": "Token budget for this session"
+    },
+    "createdAt": {
+      "type": "number",
+      "description": "Session creation timestamp"
+    }
+  },
+  "required": ["entityId", "workspaceId", "sessionType"]
+}

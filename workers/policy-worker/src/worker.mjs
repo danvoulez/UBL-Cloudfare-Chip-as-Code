@@ -490,6 +490,32 @@ export default {
       return new Response("policy_denied", { status: 403 });
     }
 
+    // Blueprint 10: Stage URL estável (@user)
+    if (path.startsWith("/@")) {
+      // voulezvous.tv/@user → resolve para stage do usuário
+      const username = path.slice(2).split("/")[0]; // Extract username from /@user
+      if (username && tenant === "voulezvous") {
+        // Forward to Media API for stage resolution
+        const mediaUpstream = env.UPSTREAM_MEDIA || "https://media.api.ubl.agency";
+        const stagePath = `/stage/${username}`;
+        const upstreamUrl = `${mediaUpstream}${stagePath}${url.search}`;
+        try {
+          const upstreamReq = new Request(upstreamUrl, {
+            method: req.method,
+            headers: req.headers,
+            body: req.method !== "GET" && req.method !== "HEAD" ? await req.clone().text() : null
+          });
+          const upstreamResp = await fetch(upstreamReq);
+          return upstreamResp;
+        } catch (e) {
+          return new Response(JSON.stringify({ error: "stage_resolution_failed", message: e.message }), {
+            status: 502,
+            headers: { "Content-Type": "application/json" }
+          });
+        }
+      }
+    }
+    
     // Forward to upstream (Blueprint 01: roteamento por prefixo)
     let upstream;
     if (path.startsWith("/core/") || path.startsWith("/admin/") || path.startsWith("/files/")) {

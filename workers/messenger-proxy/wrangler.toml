@@ -1,0 +1,17 @@
+name = "messenger-proxy"
+main = "src/index.js"
+compatibility_date = "2024-11-29"
+compatibility_flags = ["nodejs_compat"]
+
+routes = [
+  { pattern = "messenger.api.ubl.agency/*", zone_id = "3aa18fa819ee4b6e393009916432a69f" }
+]
+
+[vars]
+UPSTREAM_LLM = "https://office-llm.ubl.agency"
+UPSTREAM_MEDIA = "https://api.ubl.agency/media"
+UPSTREAM_JOBS = ""
+
+# Secrets (adicionar via Dashboard ou wrangler secret put):
+# CF_ACCESS_CLIENT_ID=7e6a8e2707cc6022d47c9b0d20c27340.access
+# CF_ACCESS_CLIENT_SECRET=2e01fba6e4a6be6f8853ed7f4fa820d1ed0a26886e7504a3894c99142ec3cff7

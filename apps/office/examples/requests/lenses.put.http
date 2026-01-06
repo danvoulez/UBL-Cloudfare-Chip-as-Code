@@ -1,0 +1,8 @@
+### Put/Select lens (stub route to be added in next drops)
+PUT http://127.0.0.1:8787/lens
+content-type: application/json
+
+{
+  "name":"canonical-only",
+  "rules": {"canonical":true}
+}

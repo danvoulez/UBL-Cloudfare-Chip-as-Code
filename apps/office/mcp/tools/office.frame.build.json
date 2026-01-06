@@ -1,0 +1,4 @@
+{
+  "name": "office.frame.build",
+  "description": "Build File Context Frame for tenant/entity with optional lens"
+}

@@ -1,0 +1,20 @@
+{
+  "name": "mcp-registry-office",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev --local",
+    "deploy": "wrangler deploy",
+    "fmt": "prettier --write ."
+  },
+  "devDependencies": {
+    "wrangler": "^3.90.0",
+    "typescript": "^5.6.3",
+    "prettier": "^3.3.3",
+    "@cloudflare/workers-types": "^4.20241106.0"
+  },
+  "dependencies": {
+    "hono": "^4.5.3"
+  }
+}

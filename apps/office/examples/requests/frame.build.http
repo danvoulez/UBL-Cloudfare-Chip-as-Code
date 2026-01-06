@@ -1,0 +1,3 @@
+### Build frame (stub route to be added in next drops)
+# @name frame_build
+GET http://127.0.0.1:8787/frame?tenant=voulezvous

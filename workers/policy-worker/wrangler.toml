@@ -26,9 +26,10 @@ ORIGIN_ALLOWLIST = "{\"voulezvous\":[\"https://voulezvous.tv\",\"https://www.vou
 # ADMIN_PATH_PREFIX mantido para compatibilidade, mas gating é por host
 ADMIN_PATH_PREFIX = "/admin"
 
-# Upstreams internos (Blueprint 01: roteamento por prefixo via Tunnel)
-UPSTREAM_CORE = "https://core.voulezvous.tv"
-UPSTREAM_WEBHOOKS = "https://origin.webhooks.local"
+    # Upstreams internos (Blueprint 01: roteamento por prefixo via Tunnel)
+    UPSTREAM_CORE = "https://core.voulezvous.tv"
+    UPSTREAM_WEBHOOKS = "https://origin.webhooks.local"
+    UPSTREAM_MEDIA = "https://media.api.ubl.agency"
 
 # Chave pública da policy (mesma usada no proxy)
 POLICY_PUBKEY_B64 = "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUNvd0JRWURLMlZ3QXlFQTkyZlFhcGVqZVhDanEydEZoU1piYnkxQk1lMTNpcmxKRGxnLzFMa2dCaUU9Ci0tLS0tRU5EIFBVQkxJQyBLRVktLS0tLQo="

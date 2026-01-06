@@ -1,0 +1,17 @@
+Messenger consolidated build
+
+Applied patches (in order):
+  - messenger-ui-incremental.zip
+  - messenger-stability-patch.zip
+  - messenger-polish-patch.zip
+
+Key files present:
+  - README_POLISH.md
+  - index.patch.css
+
+Key files NOT found (may not be needed in this codebase):
+  - frontend/src/components/JobCard.tsx
+  - frontend/src/components/cards/JobCardRenderer.tsx
+  - frontend/src/hooks/useJobs.ts
+  - frontend/src/services/jobsApi.ts
+  - patch/apply_patch.sh

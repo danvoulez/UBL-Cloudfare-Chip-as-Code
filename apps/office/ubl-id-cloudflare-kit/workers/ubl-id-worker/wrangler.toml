@@ -1,0 +1,13 @@
+name = "ubl-id-worker"
+main = "src/worker.ts"
+compatibility_date = "2024-12-01"
+
+# Route is set to a custom domain via dashboard or patched in deploy script
+# Example (custom domain): id.ubl.agency
+
+[[kv_namespaces]]
+binding = "DEVICE_KV"
+id = "REPLACE_DEVICE_KV_ID"
+
+[vars]
+ALLOW_ORIGIN = "*"

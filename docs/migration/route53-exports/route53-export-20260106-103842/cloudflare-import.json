@@ -1,0 +1,169 @@
+[
+{
+,
+  "name": "_12898ab36bb8ab1ffa4271254d775726.logline.world",
+,
+  "type": "CNAME",
+,
+  "ttl": 60,
+,
+  "content": "_b53c4e0ac9690dd2a1538bcf762a3125.jkddzztszm.acm-validations.aws.",
+,
+  "priority": null
+,
+}
+,
+{
+,
+  "name": "_amazonses.logline.world",
+,
+  "type": "TXT",
+,
+  "ttl": 1800,
+,
+  "content": "\"7pe9EJUYg+GakmSJWkYbpNeBf+Mi86FXRfnFeNdpinY=\"",
+,
+  "priority": null
+,
+}
+,
+{
+,
+  "name": "api.logline.world",
+,
+  "type": "A",
+,
+  "ttl": 300,
+,
+  "content": "52.4.126.139",
+,
+  "priority": null
+,
+}
+,
+{
+,
+  "name": "dashboard.logline.world",
+,
+  "type": "CNAME",
+,
+  "ttl": 300,
+,
+  "content": "d1n2b2uqqd0puw.cloudfront.net",
+,
+  "priority": null
+,
+}
+,
+{
+,
+  "name": "id.logline.world",
+,
+  "type": "CNAME",
+,
+  "ttl": 300,
+,
+  "content": "logline-id.vercel.app",
+,
+  "priority": null
+,
+}
+,
+{
+,
+  "name": "lab512.logline.world",
+,
+  "type": "A",
+,
+  "ttl": 300,
+,
+  "content": "18.207.58.99",
+,
+  "priority": null
+,
+}
+,
+{
+,
+  "name": "minicontratos.logline.world",
+,
+  "type": "CNAME",
+,
+  "ttl": 300,
+,
+  "content": "minicontratos-platform.vercel.app",
+,
+  "priority": null
+,
+}
+,
+{
+,
+  "name": "_c588c23179c839474cc1802afb4d795f.minicontratos.logline.world",
+,
+  "type": "CNAME",
+,
+  "ttl": 500,
+,
+  "content": "_730015b9452cf14fe6e77b3f5a905c6a.jkddzztszm.acm-validations.aws.",
+,
+  "priority": null
+,
+}
+,
+{
+,
+  "name": "_5fddaa4dee7d116250b8abaa8c5a1043.studio.logline.world",
+,
+  "type": "CNAME",
+,
+  "ttl": 300,
+,
+  "content": "_ca514b99528e416931d76aed1d19385d.jkddzztszm.acm-validations.aws.",
+,
+  "priority": null
+,
+}
+,
+{
+,
+  "name": "transformer.logline.world",
+,
+  "type": "A",
+,
+  "ttl": null,
+,
+  "content": "",
+,
+  "priority": null
+,
+}
+,
+{
+,
+  "name": "transformer.logline.world",
+,
+  "type": "AAAA",
+,
+  "ttl": null,
+,
+  "content": "",
+,
+  "priority": null
+,
+}
+,
+{
+,
+  "name": "ws.logline.world",
+,
+  "type": "A",
+,
+  "ttl": null,
+,
+  "content": "",
+,
+  "priority": null
+,
+}
+]

@@ -1,0 +1,33 @@
+{
+    "ResourceRecordSets": [
+        {
+            "Name": "logline.foundation.",
+            "Type": "NS",
+            "TTL": 172800,
+            "ResourceRecords": [
+                {
+                    "Value": "ns-2033.awsdns-62.co.uk."
+                },
+                {
+                    "Value": "ns-1330.awsdns-38.org."
+                },
+                {
+                    "Value": "ns-224.awsdns-28.com."
+                },
+                {
+                    "Value": "ns-524.awsdns-01.net."
+                }
+            ]
+        },
+        {
+            "Name": "logline.foundation.",
+            "Type": "SOA",
+            "TTL": 900,
+            "ResourceRecords": [
+                {
+                    "Value": "ns-2033.awsdns-62.co.uk. awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400"
+                }
+            ]
+        }
+    ]
+}

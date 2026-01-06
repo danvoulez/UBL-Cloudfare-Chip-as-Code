@@ -1,0 +1,9 @@
+/* index.patch.css — non-invasive polish */
+.__nofocus:focus { outline: none; box-shadow: none; }
+.__row { display: flex; align-items: center; gap: .5rem; }
+.__spread { display: flex; justify-content: space-between; align-items: center; gap: .5rem; }
+.__mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+.__muted { opacity: .7; }
+.__badge { display:inline-flex; align-items:center; border-radius: 999px; padding: 2px 8px; font-size: 12px; border: 1px solid rgba(0,0,0,.08); }
+.__progress { height: 6px; border-radius: 999px; background: rgba(0,0,0,.06); overflow: hidden; }
+.__progress > i { display:block; height:100%; width:var(--w,0%); background: currentColor; opacity:.4; }

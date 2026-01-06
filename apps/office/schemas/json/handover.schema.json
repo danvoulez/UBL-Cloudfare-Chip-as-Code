@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Handover",
+  "type": "object",
+  "properties": {
+    "entityId": {
+      "type": "string"
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 50
+    },
+    "bookmarks": {
+      "type": "array",
+      "items": {
+        "$ref": "anchor.schema.json"
+      }
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "entityId",
+    "summary"
+  ]
+}

@@ -1,0 +1,26 @@
+name = "office-llm"
+main = "src/index.ts"
+compatibility_date = "2024-12-01"
+
+# Zone ID do ubl.agency
+zone_id = "3aa18fa819ee4b6e393009916432a69f"
+
+routes = [
+  { pattern = "office-llm.ubl.agency/*", zone_id = "3aa18fa819ee4b6e393009916432a69f" }
+]
+
+# Uncomment if you want KV-backed policy at runtime
+# [[kv_namespaces]]
+# binding = "POLICY_KV"
+# id = "REPLACE_POLICY_KV_ID"
+
+[vars]
+# Base URLs for LAB LLMs (via Tunnel ou interno)
+LAB_DEFAULT_BASE = "http://lab-256:11434"
+LAB_ADULT_BASE   = "http://lab-512:11434"
+# Feature flags
+ALLOW_PREMIUM_DEFAULT = "true"
+
+# Secrets expected (set with `wrangler secret put <NAME>`)
+# - OPENAI_API_KEY (opcional)
+# - ANTHROPIC_API_KEY (opcional)

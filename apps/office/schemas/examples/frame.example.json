@@ -1,0 +1,31 @@
+{
+  "entityId": "entity_demo",
+  "tenant": "voulezvous",
+  "inventory": [
+    {
+      "fileId": "f1",
+      "path": "spec/part1.md",
+      "hash": "abc"
+    }
+  ],
+  "topK": [
+    "f1"
+  ],
+  "versionGraph": {
+    "families": []
+  },
+  "anchors": [
+    {
+      "fileId": "f1",
+      "type": "text",
+      "location": "p1#t1-10",
+      "preview": "Intro"
+    }
+  ],
+  "limits": {
+    "tokenBudget": 4000,
+    "quotas": {
+      "session": "work"
+    }
+  }
+}

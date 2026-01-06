@@ -120,5 +120,7 @@ async fn jwks_handler() -> Response {
 }
 
 pub fn router() -> Router {
-    Router::new().route("/auth/jwks.json", get(jwks_handler))
+    Router::new()
+        .route("/auth/jwks.json", get(jwks_handler))
+        .route("/.well-known/jwks.json", get(jwks_handler)) // Alias padrão OIDC/OAuth2
 }

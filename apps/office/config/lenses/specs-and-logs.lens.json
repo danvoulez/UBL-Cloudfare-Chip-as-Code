@@ -1,0 +1,10 @@
+{
+  "name": "specs-and-logs",
+  "description": "Only spec and logs files",
+  "rules": {
+    "types": [
+      "spec",
+      "log"
+    ]
+  }
+}

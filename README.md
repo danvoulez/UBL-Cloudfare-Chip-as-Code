@@ -1,7 +1,7 @@
 # Universal Business Ledger
 
 **LogLine Protocol Chip-as-Code Flagship Software**  
-featuring JSON✯Atomic and TDLN Standards
+
 
 > **"featuring JSON✯Atomic and TDLN Standards"**
 

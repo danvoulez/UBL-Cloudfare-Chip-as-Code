@@ -3,7 +3,7 @@
 **LogLine Protocol Chip-as-Code Flagship Software**  
 
 
-> **"featuring JSON✯Atomic and TDLN Standards"**
+> **featuring JSON✯Atomic and TDLN Standards**
 
 A primeira infraestrutura digital onde **leis são física implementada na rede**. Onde cada decisão é um átomo verificável. Onde confiança é calculada, não assumida.
 
